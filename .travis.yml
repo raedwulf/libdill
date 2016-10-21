@@ -34,10 +34,6 @@ addons:
       - gcc-6
       - clang
 
-branches:
-  only:
-    - master
-
 install:
   - if [[ $CONF == "shared" ]]; then ./autogen.sh && ./configure && make; fi
   - if [[ $CONF == "static" ]]; then ./autogen.sh && ./configure --disable-shared && make; fi

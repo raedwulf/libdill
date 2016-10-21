@@ -17,6 +17,9 @@ env:
    - CONF="shared"
    - CONF="static"
    - CONF="shared-poll"
+   - CONF="shared" STACK=1
+   - CONF="static" STACK=1
+   - CONF="shared-poll" STACK=1
 
 addons:
   apt:
@@ -38,6 +41,12 @@ install:
   - if [[ $CONF == "shared" ]]; then ./autogen.sh && ./configure && make; fi
   - if [[ $CONF == "static" ]]; then ./autogen.sh && ./configure --disable-shared && make; fi
   - if [[ $CONF == "shared-poll" ]]; then ./autogen.sh && ./configure CFLAGS=-DDILL_POLL && make; fi
+  - if [[ $CC == "gcc*" ]] && [[ $STACK -eq 1 ]] && [[ $CONF == "shared" ]]; then ./autogen.sh && ./configure CFLAGS="-fstack-protector-strong" && make; fi
+  - if [[ $CC == "gcc*" ]] && [[ $STACK -eq 1 ]] && [[ $CONF == "static" ]]; then ./autogen.sh && ./configure --disable-shared CFLAGS="-fstack-protector-strong" && make; fi
+  - if [[ $CC == "gcc*" ]] && [[ $STACK -eq 1 ]] && [[ $CONF == "shared-poll" ]]; then ./autogen.sh && ./configure CFLAGS="-DDILL_POLL -fstack-protector-strong" && make; fi
+  - if [[ $CC == "clang*" ]] && [[ $STACK -eq 1 ]] && [[ $CONF == "shared" ]]; then ./autogen.sh && ./configure CFLAGS="-fstack-protector -fsanitize=safe-stack" && make; fi
+  - if [[ $CC == "clang*" ]] && [[ $STACK -eq 1 ]] && [[ $CONF == "static" ]]; then ./autogen.sh && ./configure --disable-shared CFLAGS="-fstack-protector -fsanitize=safe-stack" && make; fi
+  - if [[ $CC == "clang*" ]] && [[ $STACK -eq 1 ]] && [[ $CONF == "shared-poll" ]]; then ./autogen.sh && ./configure CFLAGS="-DDILL_POLL -fstack-protector -fsanitize=safe-stack" && make; fi
 
 script:
   - make check

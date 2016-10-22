@@ -48,10 +48,8 @@ static int dill_max_cached_stacks = 64;
 static int dill_num_cached_stacks = 0;
 static struct dill_slist dill_cached_stacks = {0};
 
-/* Returns smallest value greater than val that is a multiply of unit. */
-static size_t dill_align(size_t val, size_t unit) {
-    return val % unit ? val + unit - val % unit : val;
-}
+/* Returns smallest value greater than val that is a multiple of unit. */
+#define dill_align(val, unit) (val % unit ? val + unit - val % unit : val)
 
 /* Get memory page size. The query is done once only. The value is cached. */
 static size_t dill_page_size(void) {
@@ -72,26 +70,27 @@ void *dill_allocstack(size_t *stack_size) {
     /* Allocate a new stack. */
     uint8_t *top;
 #if (HAVE_POSIX_MEMALIGN && HAVE_MPROTECT) & !defined DILL_NOGUARD
+    /* Get the page size */
+    size_t pgsz = dill_page_size();
     /* Allocate the stack so that it's memory-page-aligned.
        Add one page as stack overflow guard. */
-    size_t sz = dill_align(dill_stack_size, dill_page_size()) +
-        dill_page_size();
+    size_t sz = dill_align(dill_stack_size, pgsz) + pgsz;
     uint8_t *ptr;
-    int rc = posix_memalign((void**)&ptr, dill_page_size(), sz);
+    int rc = posix_memalign((void**)&ptr, pgsz, sz);
     if(dill_slow(rc != 0)) {
         errno = rc;
         return NULL;
     }
     /* The bottom page is used as a stack guard. This way stack overflow will
        cause segfault rather than randomly overwrite the heap. */
-    rc = mprotect(ptr, dill_page_size(), PROT_NONE);
+    rc = mprotect(ptr, pgsz, PROT_NONE);
     if(dill_slow(rc != 0)) {
         int err = errno;
         free(ptr);
         errno = err;
         return NULL;
     }
-    top = ptr + dill_page_size() + dill_stack_size;
+    top = ptr + pgsz + dill_stack_size;
 #else
     /* Simple allocation without a guard page. */
     uint8_t *ptr = malloc(dill_stack_size);

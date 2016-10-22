@@ -44,14 +44,20 @@ int main(int argc, char *argv[]) {
     }
 
     long count = atol(argv[1]);
-    int64_t start = now();
+    int64_t start = nanonow();
 
     int leftmost = channel(sizeof(int), 0);
     int left = leftmost, right = leftmost;
     long i;
     for (i = 0; i < count; ++i) {
         right = channel(sizeof(int), 0);
-        go(whisper(left, right));
+        if(go(whisper(left, right)) < 0) {
+            if(errno == ENOMEM) 
+                fprintf(stderr, "no more memory\n");
+            else
+                fprintf(stderr, "failed to create coroutine\n");
+            return -1;
+        }
         left = right;
     }
 
@@ -61,9 +67,9 @@ int main(int argc, char *argv[]) {
     chrecv(leftmost, &res, sizeof(res), -1);
     assert(res == count + 1);
 
-    int64_t stop = now();
+    int64_t stop = nanonow();
     long duration = (long)(stop - start);
-    long ns = (duration * 1000000) / count;
+    long ns = duration / count;
 
     printf("took %f seconds\n", (float)duration / 1000);
     printf("performed %ld whispers in %f seconds\n", count, ((float)duration) / 1000);

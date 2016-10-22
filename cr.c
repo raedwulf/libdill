@@ -241,7 +241,7 @@ static void dill_cr_close(struct hvfs *vfs);
 static void dill_cancel(struct dill_cr *cr, int err);
 
 /* The intial part of go(). Allocates a new stack and handle. */
-int dill_prologue(void **ctx) {
+int dill_prologue(void **ctx, void **stk) {
     /* Return ECANCELED if shutting down. */
     int rc = dill_canblock();
     if(dill_slow(rc < 0)) {errno = ECANCELED; return -1;}
@@ -249,7 +249,7 @@ int dill_prologue(void **ctx) {
     size_t stacksz;
     struct dill_cr *cr = (struct dill_cr*)dill_allocstack(&stacksz);
     if(dill_slow(!cr)) return -1;
-    --cr;
+    *stk = --cr;
     cr->vfs.query = dill_cr_query;
     cr->vfs.close = dill_cr_close;
     int hndl = hcreate(&cr->vfs);

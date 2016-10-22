@@ -52,6 +52,7 @@
 /*  Symbol visibility                                                         */
 /******************************************************************************/
 
+/* Define the amount of memory to allocate through alloca */
 #if !defined __GNUC__ && !defined __clang__
 #error "Unsupported compiler!"
 #endif
@@ -97,7 +98,7 @@ DILL_EXPORT int hclose(int h);
 DILL_EXPORT extern volatile int dill_unoptimisable1;
 DILL_EXPORT extern volatile void *dill_unoptimisable2;
 
-DILL_EXPORT __attribute__((noinline)) int dill_prologue(void **ctx);
+DILL_EXPORT __attribute__((noinline)) int dill_prologue(void **ctx, void **stk);
 DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
 DILL_EXPORT int dill_proc_prologue(int *hndl);
 DILL_EXPORT void dill_proc_epilogue(void);
@@ -107,14 +108,14 @@ DILL_EXPORT void dill_proc_epilogue(void);
     int ret;\
     asm("lea     LJMPRET%=(%%rip), %%rcx\n\t"\
         "xor     %%rax, %%rax\n\t"\
-        "mov     %%rbx, (%%rdx)\n\t"\
-        "mov     %%rbp, 8(%%rdx)\n\t"\
+        "mov     %%rcx, (%%rdx)\n\t"\
+        "mov     %%rsp, 8(%%rdx)\n\t"\
         "mov     %%r12, 16(%%rdx)\n\t"\
-        "mov     %%rsp, 24(%%rdx)\n\t"\
+        "mov     %%rbp, 24(%%rdx)\n\t"\
         "mov     %%r13, 32(%%rdx)\n\t"\
         "mov     %%r14, 40(%%rdx)\n\t"\
         "mov     %%r15, 48(%%rdx)\n\t"\
-        "mov     %%rcx, 56(%%rdx)\n\t"\
+        "mov     %%rbx, 56(%%rdx)\n\t"\
         "mov     %%rdi, 64(%%rdx)\n\t"\
         "mov     %%rsi, 72(%%rdx)\n\t"\
         "LJMPRET%=:\n\t"\
@@ -124,22 +125,23 @@ DILL_EXPORT void dill_proc_epilogue(void);
     ret;\
 })
 #define dill_longjmp(ctx) \
-    asm("movq   (%%rax), %%rbx\n\t"\
-        "movq   8(%%rax), %%rbp\n\t"\
+    asm("movq   (%%rax), %%rdx\n\t"\
+        "movq   8(%%rax), %%rsp\n\t"\
         "movq   16(%%rax), %%r12\n\t"\
-        "movq   24(%%rax), %%rdx\n\t"\
+        "movq   24(%%rax), %%rbp\n\t"\
         "movq   32(%%rax), %%r13\n\t"\
         "movq   40(%%rax), %%r14\n\t"\
-        "mov    %%rdx, %%rsp\n\t"\
         "movq   48(%%rax), %%r15\n\t"\
-        "movq   56(%%rax), %%rdx\n\t"\
+        "movq   56(%%rax), %%rbx\n\t"\
         "movq   64(%%rax), %%rdi\n\t"\
         "movq   72(%%rax), %%rsi\n\t"\
         "jmp    *%%rdx\n\t"\
         : : "a" (ctx) : "rdx" \
     )
-#define dill_setsp(x) asm volatile("leaq -8(%%rax), %%rsp"::"rax"(x));
+#define dill_setsp(x) asm volatile("movq %0, %%rsp"::"r"(x))
+#define dill_getsp() ({size_t x;asm volatile("":"=rsp"(x));x;})
 #define dill_sizeof_jmpbuf 80
+//#define dill_dummyuse(a) asm(""::"r"(a))
 #elif defined(__i386__)
 #define dill_setjmp(ctx) ({\
     int ret;\
@@ -165,14 +167,20 @@ DILL_EXPORT void dill_proc_epilogue(void);
         "jmp    *%%edx\n\t"\
         : : "a" (ctx) : "edx" \
     )
+#define dill_setsp(x) asm volatile("movl %0, %%esp"::"r"(x));
+#define dill_getsp() ({size_t x;asm volatile("":"=esp"(x));x;})
 #define dill_sizeof_jmpbuf 24
-#define dill_setsp(x) asm volatile("leal -4(%%eax), %%esp"::"eax"(x));
+//#define dill_dummyuse(a) asm(""::"r"(a))
 #else
 #include <setjmp.h>
 #define dill_setjmp(ctx) sigsetjmp(*(sigjmp_buf *)ctx, 0)
 #define dill_longjmp(ctx) siglongjmp(*(sigjmp_buf *)ctx, 1)
 #define dill_sizeof_jmpbuf sizeof(sigjmp_buf)
 #define DILL_NOASMSETSP
+#endif
+
+#ifndef dill_dummyuse
+#define dill_dummyuse(a) (dill_unoptimisable2 = a)
 #endif
 
 /* Statement expressions are a gcc-ism but they are also supported by clang.
@@ -188,13 +196,13 @@ DILL_EXPORT void dill_proc_epilogue(void);
 /* In newer GCCs, -fstack-protector breaks on this; use -fno-stack-protector */
 #define go(fn) \
     ({\
-        void *ctx;\
-        int h = dill_prologue(&ctx);\
+        void *ctx, *stk;\
+        int h = dill_prologue(&ctx, &stk);\
         if(h >= 0) {\
             if(!dill_setjmp(ctx)) {\
                 int dill_anchor[dill_unoptimisable1];\
                 dill_unoptimisable2 = &dill_anchor;\
-                char dill_filler[(char*)&dill_anchor - (char*)hquery(h, NULL)];\
+                char dill_filler[(char*)&dill_anchor - (char *)stk];\
                 dill_unoptimisable2 = &dill_filler;\
                 fn;\
                 dill_epilogue();\
@@ -203,17 +211,18 @@ DILL_EXPORT void dill_proc_epilogue(void);
         h;\
     })
 #else
+
 /* This works with newer GCCs and is a bit more optimised.
    However, dill_setsp needs to be implemented per architecture. */
 #define go(fn) \
     ({\
-        void *ctx;\
-        int h = dill_prologue(&ctx);\
+        void *ctx, *stk;\
+        int h = dill_prologue(&ctx, &stk);\
         if(h >= 0) {\
             if(!dill_setjmp(ctx)) {\
-                int dill_anchor[dill_unoptimisable1];\
-                dill_unoptimisable2 = &dill_anchor;\
-                dill_setsp(hquery(h, NULL));\
+                char a[dill_unoptimisable1];\
+                dill_dummyuse(a);\
+                dill_setsp(stk);\
                 fn;\
                 dill_epilogue();\
             }\

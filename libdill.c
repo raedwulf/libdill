@@ -32,26 +32,30 @@
 #include "libdill.h"
 #include "utils.h"
 
-int64_t now(void) {
+inline int64_t nanonow(void) {
 #if defined __APPLE__
     static mach_timebase_info_data_t dill_mtid = {0};
     if (dill_slow(!dill_mtid.denom))
         mach_timebase_info(&dill_mtid);
     uint64_t ticks = mach_absolute_time();
-    return (int64_t)(ticks * dill_mtid.numer / dill_mtid.denom / 1000000);
+    return (int64_t)(ticks * dill_mtid.numer / dill_mtid.denom);
 #elif defined CLOCK_MONOTONIC
     struct timespec ts;
     int rc = clock_gettime(CLOCK_MONOTONIC, &ts);
     dill_assert (rc == 0);
-    return ((int64_t)ts.tv_sec) * 1000 + (((int64_t)ts.tv_nsec) / 1000000);
+    return ((int64_t)ts.tv_sec) * 1000000000 + (((int64_t)ts.tv_nsec));
 #else
     /* This is slow and error-prone (time can jump backwards!) but it's just
        a last resort option. */
     struct timeval tv;
     int rc = gettimeofday(&tv, NULL);
     assert(rc == 0);
-    return ((int64_t)tv.tv_sec) * 1000 + (((int64_t)tv.tv_usec) / 1000);
+    return ((int64_t)tv.tv_sec) * 10000000 + (((int64_t)tv.tv_usec) * 1000);
 #endif
+}
+
+int64_t now(void) {
+    return nanonow() / 1000000;
 }
 
 int msleep(int64_t deadline) {

@@ -26,7 +26,6 @@
 #define LIBDILL_H_INCLUDED
 
 #include <errno.h>
-#include <setjmp.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <unistd.h>
@@ -98,7 +97,7 @@ DILL_EXPORT int hclose(int h);
 DILL_EXPORT extern volatile int dill_unoptimisable1;
 DILL_EXPORT extern volatile void *dill_unoptimisable2;
 
-DILL_EXPORT __attribute__((noinline)) int dill_prologue(sigjmp_buf **ctx);
+DILL_EXPORT __attribute__((noinline)) int dill_prologue(void **ctx);
 DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
 DILL_EXPORT int dill_proc_prologue(int *hndl);
 DILL_EXPORT void dill_proc_epilogue(void);
@@ -121,7 +120,7 @@ DILL_EXPORT void dill_proc_epilogue(void);
         "LJMPRET%=:\n\t"\
         : "=a" (ret)\
         : "d" (ctx)\
-        : "memory", "rcx", "r8", "r9", "r10", "r11");\
+        : "memory", "rcx", "r8", "r9", "r10", "r11", "cc");\
     ret;\
 })
 #define dill_longjmp(ctx) \
@@ -140,6 +139,7 @@ DILL_EXPORT void dill_proc_epilogue(void);
         : : "a" (ctx) : "rdx" \
     )
 #define dill_setsp(x) asm volatile("leaq -8(%%rax), %%rsp"::"rax"(x));
+#define dill_sizeof_jmpbuf 80
 #elif defined(__i386__)
 #define dill_setjmp(ctx) ({\
     int ret;\
@@ -152,7 +152,7 @@ DILL_EXPORT void dill_proc_epilogue(void);
         "movl   %%esp, 20(%%edx)\n\t"\
         "xorl   %%eax, %%eax\n\t"\
         "LJMPRET%=:\n\t"\
-        : "=a" (ret) : "d" (ctx) : "memory");\
+        : "=a" (ret) : "d" (ctx) : "memory", "cc");\
     ret;\
 })
 #define dill_longjmp(ctx) \
@@ -165,10 +165,13 @@ DILL_EXPORT void dill_proc_epilogue(void);
         "jmp    *%%edx\n\t"\
         : : "a" (ctx) : "edx" \
     )
+#define dill_sizeof_jmpbuf 24
 #define dill_setsp(x) asm volatile("leal -4(%%eax), %%esp"::"eax"(x));
 #else
-#define dill_setjmp(ctx) sigsetjmp(ctx, 0)
-#define dill_longjmp(ctx) siglongjmp(ctx, 1)
+#include <setjmp.h>
+#define dill_setjmp(ctx) sigsetjmp(*(sigjmp_buf *)ctx, 0)
+#define dill_longjmp(ctx) siglongjmp(*(sigjmp_buf *)ctx, 1)
+#define dill_sizeof_jmpbuf sizeof(sigjmp_buf)
 #define DILL_NOASMSETSP
 #endif
 
@@ -185,10 +188,10 @@ DILL_EXPORT void dill_proc_epilogue(void);
 /* In newer GCCs, -fstack-protector breaks on this; use -fno-stack-protector */
 #define go(fn) \
     ({\
-        sigjmp_buf *ctx;\
+        void *ctx;\
         int h = dill_prologue(&ctx);\
         if(h >= 0) {\
-            if(!dill_setjmp(*ctx)) {\
+            if(!dill_setjmp(ctx)) {\
                 int dill_anchor[dill_unoptimisable1];\
                 dill_unoptimisable2 = &dill_anchor;\
                 char dill_filler[(char*)&dill_anchor - (char*)hquery(h, NULL)];\
@@ -204,10 +207,10 @@ DILL_EXPORT void dill_proc_epilogue(void);
    However, dill_setsp needs to be implemented per architecture. */
 #define go(fn) \
     ({\
-        sigjmp_buf *ctx;\
+        void *ctx;\
         int h = dill_prologue(&ctx);\
         if(h >= 0) {\
-            if(!dill_setjmp(*ctx)) {\
+            if(!dill_setjmp(ctx)) {\
                 int dill_anchor[dill_unoptimisable1];\
                 dill_unoptimisable2 = &dill_anchor;\
                 dill_setsp(hquery(h, NULL));\

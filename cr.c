@@ -54,7 +54,7 @@ struct dill_cr {
     int err;
     /* When coroutine is suspended 'ctx' holds the context
        (registers and such). */
-    sigjmp_buf ctx;
+    char ctx[dill_sizeof_jmpbuf];
     /* If coroutine is blocked, here's the list of clauses it waits for. */
     struct dill_slist clauses;
     /* Coroutine-local storage. */
@@ -241,7 +241,7 @@ static void dill_cr_close(struct hvfs *vfs);
 static void dill_cancel(struct dill_cr *cr, int err);
 
 /* The intial part of go(). Allocates a new stack and handle. */
-int dill_prologue(sigjmp_buf **ctx) {
+int dill_prologue(void **ctx) {
     /* Return ECANCELED if shutting down. */
     int rc = dill_canblock();
     if(dill_slow(rc < 0)) {errno = ECANCELED; return -1;}
@@ -267,7 +267,7 @@ int dill_prologue(sigjmp_buf **ctx) {
     /* Return the context of the parent coroutine to the caller so that it can
        store its current state. It can't be done here becuse we are at the
        wrong stack frame here. */
-    *ctx = &dill_r->ctx;
+    *ctx = dill_r->ctx;
     /* Add parent coroutine to the list of coroutines ready for execution. */
     dill_resume(dill_r, 0, 0);
     /* Mark the new coroutine as running. */

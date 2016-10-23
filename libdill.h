@@ -175,16 +175,16 @@ DILL_EXPORT void dill_proc_epilogue(void);
 #define dill_sizeof_jmpbuf 24
 #define dill_dummyuse(a) asm(""::"r"(a))
 #else
-# include <setjmp.h>
-# define dill_setjmp(ctx) sigsetjmp(*(sigjmp_buf *)ctx, 0)
-# define dill_longjmp(ctx) siglongjmp(*(sigjmp_buf *)ctx, 1)
-# define dill_sizeof_jmpbuf sizeof(sigjmp_buf)
-# define DILL_NOASMSETSP
+#include <setjmp.h>
+#define dill_setjmp(ctx) sigsetjmp(*(sigjmp_buf *)ctx, 0)
+#define dill_longjmp(ctx) siglongjmp(*(sigjmp_buf *)ctx, 1)
+#define dill_sizeof_jmpbuf sizeof(sigjmp_buf)
+#define DILL_NOASMSETSP
 #endif
 
 #ifndef dill_dummyuse
-# define DILL_UNOPTIMISABLE2
-# define dill_dummyuse(a) (dill_unoptimisable2 = a)
+#define DILL_UNOPTIMISABLE2
+#define dill_dummyuse(a) (dill_unoptimisable2 = a)
 #endif
 
 /* Here be dragons: without assembly, the VLAs are necessary to coerce the 
@@ -198,38 +198,38 @@ DILL_EXPORT void dill_proc_epilogue(void);
 
 /* In newer GCCs, -fstack-protector* breaks on VLAs and alloca, use -fno-stack-protector */
 #ifdef DILL_NOASMSETSP
-# if __STDC_VERSION__ == 199901L || (__STDC_VERSION__ == 201112L && !defined(__STDC_NO_VLA))
+#if __STDC_VERSION__ == 199901L || (__STDC_VERSION__ == 201112L && !defined(__STDC_NO_VLA))
 /* Implement dill_gosp using VLAs: this macro is FRAGILE */
-#  define dill_gosp(stk) \
+#define dill_gosp(stk) \
    char dill_anchor[dill_unoptimisable1];\
    dill_dummyuse(&dill_anchor);\
    char dill_filler[(char *)&dill_anchor - (char *)stk];\
    dill_dummyuse(&dill_filler);
-# elif HAVE_ALLOCA_H
-#  include <alloca.h>
-# elif defined __GNUC__
-#  define alloca __builtin_alloca
-# else
-#  include <stddef.h>
+#elif HAVE_ALLOCA_H
+#include <alloca.h>
+#elif defined __GNUC__
+#define alloca __builtin_alloca
+#else
+#include <stddef.h>
 void *alloca (size_t);
 # endif
 /* Implement dill_gosp using alloca, is slightly slower than VLAs but more robust */
-# if !defined dill_gosp && defined alloca
-#  if defined __GNUC__
-#   define dill_getsp() alloca(0)
-#  elif defined __clang__
-#   define dill_getsp() alloca(sizeof(size_t))
-#  endif
-#  define dill_setsp(stk) alloca((char *)dill_getsp() - (char *)stk)
-#  define dill_gosp(stk) dill_dummyuse(dill_setsp(stk))
-# endif
+#if !defined dill_gosp && defined alloca
+#if defined __GNUC__
+#define dill_getsp() alloca(0)
+#elif defined __clang__
+#define dill_getsp() alloca(sizeof(size_t))
+#endif
+#define dill_setsp(stk) alloca((char *)dill_getsp() - (char *)stk)
+#define dill_gosp(stk) dill_dummyuse(dill_setsp(stk))
+#endif
 #else
 /* This works with newer GCCs and is a bit more optimised.
    However, dill_setsp needs to be implemented per architecture.
    The trick here is to force the compiler to generate a stack frame by...
    requesting it, of course.
  */
-# define dill_gosp(stk) \
+#define dill_gosp(stk) \
     dill_dummyuse(__builtin_frame_address(0)); \
     dill_setsp(stk);
 #endif

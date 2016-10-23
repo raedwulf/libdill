@@ -199,7 +199,7 @@ DILL_EXPORT void dill_proc_epilogue(void);
 /* In newer GCCs, -fstack-protector* breaks on VLAs and alloca, use -fno-stack-protector */
 #ifdef DILL_NOASMSETSP
 # if __STDC_VERSION__ == 199901L || (__STDC_VERSION__ == 201112L && !defined(__STDC_NO_VLA))
-/* Implement dill_gosp using VLAs */
+/* Implement dill_gosp using VLAs: this macro is FRAGILE */
 #  define dill_gosp(stk) \
    char dill_anchor[dill_unoptimisable1];\
    dill_dummyuse(&dill_anchor);\
@@ -214,7 +214,7 @@ DILL_EXPORT void dill_proc_epilogue(void);
 void *alloca (size_t);
 # endif
 /* Implement dill_gosp using alloca, is slightly slower than VLAs but more robust */
-# if !defined gosp && defined alloca
+# if !defined dill_gosp && defined alloca
 #  if defined __GNUC__
 #   define dill_getsp() alloca(0)
 #  elif defined __clang__
@@ -240,7 +240,7 @@ void *alloca (size_t);
         int h = dill_prologue(0, &ctx, &stk);\
         if(h >= 0) {\
             if(!dill_setjmp(ctx)) {\
-                dill_gosp(stk);\ /* fragile macro */
+                dill_gosp(stk);\
                 fn;\
                 dill_epilogue();\
             }\

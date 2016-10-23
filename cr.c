@@ -79,8 +79,13 @@ struct dill_cr {
 } __attribute__((aligned(16),packed));
 
 /* Storage for constants used by go() macro. */
+
+#ifdef DILL_NOASMSETSP
 volatile int dill_unoptimisable1 = 1;
+#endif
+#if defined DILL_NOASMSETSP || defined DILL_UNOPTIMISABLE2
 volatile void *dill_unoptimisable2 = NULL;
+#endif
 
 /* Main coroutine. */
 struct dill_cr dill_main_data = {DILL_SLIST_ITEM_INITIALISER};

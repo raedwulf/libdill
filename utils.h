@@ -52,6 +52,26 @@
 #define dill_slow(x) (x)
 #endif
 
+/* If-then-else macros with min and max implementations */
+#ifdef __auto_type
+#define dill_typeof __auto_type
+#elif __STDC_VERSION__ >= 199901L
+#define dill_typeof __typeof__
+#elif defined typeof
+#define dill_typeof typeof
+#else
+#error "Compiler doesn't support typeof"
+#endif
+#define dill_ite(a, b, o) ({ \
+    dill_typeof (a) _a = (a); \
+    dill_typeof (b) _b = (b); \
+    o(_a, _b) ? _a : _b; \
+})
+#define dill_gt(a, b) (a > b)
+#define dill_lt(a, b) (a < b)
+#define dill_max(a, b) dill_ite(a, b, dill_gt)
+#define dill_min(a, b) dill_ite(a, b, dill_lt)
+
 /* Define our own assert. This way we are sure that it stays in place even
    if the standard C assert would be thrown away by the compiler. It also
    allows us to overload it as needed. */

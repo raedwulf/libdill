@@ -93,7 +93,56 @@ AC_CHECK_FUNCS([clock_gettime])
 AC_CHECK_LIB([socket], [socket])
 AC_CHECK_FUNCS([epoll_create], [] ,[AC_DEFINE([DILL_NO_EPOLL])])
 AC_CHECK_FUNCS([kqueue], [] ,[AC_DEFINE([DILL_NO_KQUEUE])])
-AC_FUNC_ALLOCA()
+AC_FUNC_ALLOCA
+AC_FUNC_MMAP
+AC_CACHE_CHECK([for __builtin_popcount],
+    ac_cv__builtin_popcount, [
+        AC_TRY_COMPILE([],
+            [__builtin_popcount(123);],
+                [ac_cv__builtin_popcount=yes],
+                [ac_cv__builtin_popcount=no]),
+    ])
+if test "x$ac_cv__builtin_popcount" = "xyes" ; then
+  AC_DEFINE(HAVE_POPCOUNT)
+fi
+
+ac_save_cflags="$CFLAGS"
+CFLAGS=-fuse-ld=gold
+AC_MSG_CHECKING([whether CC supports -fuse-ld=gold])
+AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM],
+    [AC_MSG_RESULT([yes])]
+    [AC_DEFINE([HAVE_GOLD_LINKER])],
+    [AC_MSG_RESULT([no])]
+)
+CFLAGS="$ac_save_cflags"
+
+CFLAGS=-fsplit-stack
+AC_MSG_CHECKING([whether CC supports -fsplit-stack])
+AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM],
+    [AC_MSG_RESULT([yes])]
+    [AC_DEFINE([HAVE_SPLIT_STACK])],
+    [AC_MSG_RESULT([no])]
+)
+CFLAGS="$ac_save_cflags"
+
+AC_COMPILE_IFELSE(
+   [AC_LANG_PROGRAM(
+       [[#include <ucontext.h>]],
+       [[ucontext_t test;getcontext(&test);]])],
+   [have_ucontext="yes"],
+   [have_ucontext="no"])
+AC_MSG_CHECKING([for ucontext])
+AC_MSG_RESULT([${have_ucontext}])
+AC_COMPILE_IFELSE(
+   [AC_LANG_PROGRAM(
+   [[#include <setjmp.h>]],
+   [[jmp_buf context;setjmp(&context);]])],
+   [have_setjmp="yes"],
+   [have_setjmp="no"])
+AC_MSG_CHECKING([for setjmp])
+AC_MSG_RESULT([${have_setjmp}])
 
 ################################################################################
 #  Libtool                                                                     #

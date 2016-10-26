@@ -36,7 +36,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1
+  - env: STACK=1
     compiler: gcc-4.9
     addons:
       apt:
@@ -44,7 +44,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 POLL=1
+  - env: POLL=1 STACK=1
     compiler: gcc-4.9
     addons:
       apt:
@@ -52,7 +52,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 POLL=1
+  - env: STATIC=1 STACK=1
     compiler: gcc-4.9
     addons:
       apt:
@@ -60,7 +60,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 STATIC=1 POLL=1
+  - env: POLL=1 STATIC=1 STACK=1
     compiler: gcc-4.9
     addons:
       apt:
@@ -100,7 +100,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 STATIC=1
+  - env: STACK=1 STATIC=1
     compiler: gcc-4.9
     addons:
       apt:
@@ -108,7 +108,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 POLL=1 STATIC=1
+  - env: POLL=1 STACK=1 STATIC=1
     compiler: gcc-4.9
     addons:
       apt:
@@ -116,7 +116,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 POLL=1 STATIC=1
+  - env: STATIC=1 STACK=1 STATIC=1
     compiler: gcc-4.9
     addons:
       apt:
@@ -124,7 +124,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 STATIC=1 POLL=1 STATIC=1
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1
     compiler: gcc-4.9
     addons:
       apt:
@@ -164,7 +164,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 OPT=-O3
+  - env: STACK=1 OPT=-O3
     compiler: gcc-4.9
     addons:
       apt:
@@ -172,7 +172,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 POLL=1 OPT=-O3
+  - env: POLL=1 STACK=1 OPT=-O3
     compiler: gcc-4.9
     addons:
       apt:
@@ -180,7 +180,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 POLL=1 OPT=-O3
+  - env: STATIC=1 STACK=1 OPT=-O3
     compiler: gcc-4.9
     addons:
       apt:
@@ -188,7 +188,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 STATIC=1 POLL=1 OPT=-O3
+  - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
     compiler: gcc-4.9
     addons:
       apt:
@@ -228,7 +228,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 STATIC=1 OPT=-O3
+  - env: STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-4.9
     addons:
       apt:
@@ -236,7 +236,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 POLL=1 STATIC=1 OPT=-O3
+  - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-4.9
     addons:
       apt:
@@ -244,7 +244,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 POLL=1 STATIC=1 OPT=-O3
+  - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-4.9
     addons:
       apt:
@@ -252,7 +252,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: POLL=1 STATIC=1 POLL=1 STATIC=1 OPT=-O3
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-4.9
     addons:
       apt:
@@ -292,7 +292,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1
+  - env: STACK=1
     compiler: gcc-5
     addons:
       apt:
@@ -300,7 +300,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 POLL=1
+  - env: POLL=1 STACK=1
     compiler: gcc-5
     addons:
       apt:
@@ -308,7 +308,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 POLL=1
+  - env: STATIC=1 STACK=1
     compiler: gcc-5
     addons:
       apt:
@@ -316,7 +316,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 STATIC=1 POLL=1
+  - env: POLL=1 STATIC=1 STACK=1
     compiler: gcc-5
     addons:
       apt:
@@ -356,7 +356,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 STATIC=1
+  - env: STACK=1 STATIC=1
     compiler: gcc-5
     addons:
       apt:
@@ -364,7 +364,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 POLL=1 STATIC=1
+  - env: POLL=1 STACK=1 STATIC=1
     compiler: gcc-5
     addons:
       apt:
@@ -372,7 +372,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 POLL=1 STATIC=1
+  - env: STATIC=1 STACK=1 STATIC=1
     compiler: gcc-5
     addons:
       apt:
@@ -380,7 +380,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 STATIC=1 POLL=1 STATIC=1
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1
     compiler: gcc-5
     addons:
       apt:
@@ -420,7 +420,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 OPT=-O3
+  - env: STACK=1 OPT=-O3
     compiler: gcc-5
     addons:
       apt:
@@ -428,7 +428,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 POLL=1 OPT=-O3
+  - env: POLL=1 STACK=1 OPT=-O3
     compiler: gcc-5
     addons:
       apt:
@@ -436,7 +436,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 POLL=1 OPT=-O3
+  - env: STATIC=1 STACK=1 OPT=-O3
     compiler: gcc-5
     addons:
       apt:
@@ -444,7 +444,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 STATIC=1 POLL=1 OPT=-O3
+  - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
     compiler: gcc-5
     addons:
       apt:
@@ -484,7 +484,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 STATIC=1 OPT=-O3
+  - env: STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-5
     addons:
       apt:
@@ -492,7 +492,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 POLL=1 STATIC=1 OPT=-O3
+  - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-5
     addons:
       apt:
@@ -500,7 +500,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 POLL=1 STATIC=1 OPT=-O3
+  - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-5
     addons:
       apt:
@@ -508,7 +508,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: POLL=1 STATIC=1 POLL=1 STATIC=1 OPT=-O3
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-5
     addons:
       apt:
@@ -548,7 +548,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1
+  - env: STACK=1
     compiler: gcc-6
     addons:
       apt:
@@ -556,7 +556,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 POLL=1
+  - env: POLL=1 STACK=1
     compiler: gcc-6
     addons:
       apt:
@@ -564,7 +564,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 POLL=1
+  - env: STATIC=1 STACK=1
     compiler: gcc-6
     addons:
       apt:
@@ -572,7 +572,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 STATIC=1 POLL=1
+  - env: POLL=1 STATIC=1 STACK=1
     compiler: gcc-6
     addons:
       apt:
@@ -612,7 +612,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 STATIC=1
+  - env: STACK=1 STATIC=1
     compiler: gcc-6
     addons:
       apt:
@@ -620,7 +620,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 POLL=1 STATIC=1
+  - env: POLL=1 STACK=1 STATIC=1
     compiler: gcc-6
     addons:
       apt:
@@ -628,7 +628,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 POLL=1 STATIC=1
+  - env: STATIC=1 STACK=1 STATIC=1
     compiler: gcc-6
     addons:
       apt:
@@ -636,7 +636,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 STATIC=1 POLL=1 STATIC=1
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1
     compiler: gcc-6
     addons:
       apt:
@@ -676,7 +676,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 OPT=-O3
+  - env: STACK=1 OPT=-O3
     compiler: gcc-6
     addons:
       apt:
@@ -684,7 +684,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 POLL=1 OPT=-O3
+  - env: POLL=1 STACK=1 OPT=-O3
     compiler: gcc-6
     addons:
       apt:
@@ -692,7 +692,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 POLL=1 OPT=-O3
+  - env: STATIC=1 STACK=1 OPT=-O3
     compiler: gcc-6
     addons:
       apt:
@@ -700,7 +700,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 STATIC=1 POLL=1 OPT=-O3
+  - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
     compiler: gcc-6
     addons:
       apt:
@@ -740,7 +740,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 STATIC=1 OPT=-O3
+  - env: STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-6
     addons:
       apt:
@@ -748,7 +748,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 POLL=1 STATIC=1 OPT=-O3
+  - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-6
     addons:
       apt:
@@ -756,7 +756,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 POLL=1 STATIC=1 OPT=-O3
+  - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-6
     addons:
       apt:
@@ -764,7 +764,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: POLL=1 STATIC=1 POLL=1 STATIC=1 OPT=-O3
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
     compiler: gcc-6
     addons:
       apt:

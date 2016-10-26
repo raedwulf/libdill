@@ -5,6 +5,7 @@ sudo: false
 matrix:
   include:
   - env:
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -13,6 +14,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -21,6 +23,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -29,6 +32,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -37,6 +41,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STACK=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -45,6 +50,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STACK=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -53,6 +59,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1 STACK=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -61,6 +68,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1 STACK=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -69,6 +77,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -77,6 +86,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -85,6 +95,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1 STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -93,6 +104,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1 STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -101,6 +113,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STACK=1 STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -109,6 +122,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -117,6 +131,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -125,6 +140,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -133,6 +149,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -141,6 +158,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -149,6 +167,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -157,6 +176,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -165,6 +185,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -173,6 +194,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -181,6 +203,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -189,6 +212,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -197,6 +221,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -205,6 +230,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -213,6 +239,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -221,6 +248,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -229,6 +257,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -237,6 +266,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -245,6 +275,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -253,6 +284,7 @@ matrix:
         packages:
           - gcc-4.9
   - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-4.9
     addons:
       apt:
@@ -261,6 +293,7 @@ matrix:
         packages:
           - gcc-4.9
   - env:
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -269,6 +302,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -277,6 +311,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -285,6 +320,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -293,6 +329,7 @@ matrix:
         packages:
           - gcc-5
   - env: STACK=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -301,6 +338,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STACK=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -309,6 +347,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1 STACK=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -317,6 +356,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1 STACK=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -325,6 +365,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -333,6 +374,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -341,6 +383,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1 STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -349,6 +392,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1 STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -357,6 +401,7 @@ matrix:
         packages:
           - gcc-5
   - env: STACK=1 STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -365,6 +410,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -373,6 +419,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -381,6 +428,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -389,6 +437,7 @@ matrix:
         packages:
           - gcc-5
   - env: OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -397,6 +446,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -405,6 +455,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -413,6 +464,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -421,6 +473,7 @@ matrix:
         packages:
           - gcc-5
   - env: STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -429,6 +482,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -437,6 +491,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -445,6 +500,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -453,6 +509,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -461,6 +518,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -469,6 +527,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -477,6 +536,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -485,6 +545,7 @@ matrix:
         packages:
           - gcc-5
   - env: STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -493,6 +554,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -501,6 +563,7 @@ matrix:
         packages:
           - gcc-5
   - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -509,6 +572,7 @@ matrix:
         packages:
           - gcc-5
   - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-5
     addons:
       apt:
@@ -517,6 +581,7 @@ matrix:
         packages:
           - gcc-5
   - env:
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -525,6 +590,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -533,6 +599,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -541,6 +608,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -549,6 +617,7 @@ matrix:
         packages:
           - gcc-6
   - env: STACK=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -557,6 +626,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STACK=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -565,6 +635,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1 STACK=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -573,6 +644,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1 STACK=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -581,6 +653,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -589,6 +662,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -597,6 +671,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1 STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -605,6 +680,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1 STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -613,6 +689,7 @@ matrix:
         packages:
           - gcc-6
   - env: STACK=1 STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -621,6 +698,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -629,6 +707,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -637,6 +716,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1 STACK=1 STATIC=1
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -645,6 +725,7 @@ matrix:
         packages:
           - gcc-6
   - env: OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -653,6 +734,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -661,6 +743,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -669,6 +752,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -677,6 +761,7 @@ matrix:
         packages:
           - gcc-6
   - env: STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -685,6 +770,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -693,6 +779,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -701,6 +788,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -709,6 +797,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -717,6 +806,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -725,6 +815,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -733,6 +824,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -741,6 +833,7 @@ matrix:
         packages:
           - gcc-6
   - env: STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -749,6 +842,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -757,6 +851,7 @@ matrix:
         packages:
           - gcc-6
   - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -765,6 +860,7 @@ matrix:
         packages:
           - gcc-6
   - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
     compiler: gcc-6
     addons:
       apt:
@@ -772,6 +868,486 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
+  - env:
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STACK=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STACK=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1 STACK=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1 STACK=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1 STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1 STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STACK=1 STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STACK=1 STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1 STACK=1 STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STACK=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STACK=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1 STACK=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1 STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STACK=1 STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: linux
+    compiler: clang
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
+  - env:
+    os: osx
+    compiler: gcc
+  - env:
+    os: osx
+    compiler: clang
+  - env: POLL=1
+    os: osx
+    compiler: gcc
+  - env: POLL=1
+    os: osx
+    compiler: clang
+  - env: STATIC=1
+    os: osx
+    compiler: gcc
+  - env: STATIC=1
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1
+    os: osx
+    compiler: clang
+  - env: STACK=1
+    os: osx
+    compiler: gcc
+  - env: STACK=1
+    os: osx
+    compiler: clang
+  - env: POLL=1 STACK=1
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STACK=1
+    os: osx
+    compiler: clang
+  - env: STATIC=1 STACK=1
+    os: osx
+    compiler: gcc
+  - env: STATIC=1 STACK=1
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1 STACK=1
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1 STACK=1
+    os: osx
+    compiler: clang
+  - env: STATIC=1
+    os: osx
+    compiler: gcc
+  - env: STATIC=1
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1
+    os: osx
+    compiler: clang
+  - env: STATIC=1 STATIC=1
+    os: osx
+    compiler: gcc
+  - env: STATIC=1 STATIC=1
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1 STATIC=1
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1 STATIC=1
+    os: osx
+    compiler: clang
+  - env: STACK=1 STATIC=1
+    os: osx
+    compiler: gcc
+  - env: STACK=1 STATIC=1
+    os: osx
+    compiler: clang
+  - env: POLL=1 STACK=1 STATIC=1
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STACK=1 STATIC=1
+    os: osx
+    compiler: clang
+  - env: STATIC=1 STACK=1 STATIC=1
+    os: osx
+    compiler: gcc
+  - env: STATIC=1 STACK=1 STATIC=1
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1
+    os: osx
+    compiler: clang
+  - env: OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: OPT=-O3
+    os: osx
+    compiler: clang
+  - env: POLL=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: POLL=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: STACK=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: STACK=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: POLL=1 STACK=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STACK=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: STATIC=1 STACK=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: STATIC=1 STACK=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: STATIC=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: STATIC=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: STACK=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: STACK=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STACK=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: gcc
+  - env: POLL=1 STATIC=1 STACK=1 STATIC=1 OPT=-O3
+    os: osx
+    compiler: clang
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update      ; fi

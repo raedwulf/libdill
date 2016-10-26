@@ -13,12 +13,23 @@ compiler:
 
 env:
   matrix:
-   - CONF="shared" STACK=0
-   - CONF="static" STACK=0
-   - CONF="shared-poll" STACK=0
-   - CONF="shared" STACK=1
-   - CONF="static" STACK=1
-   - CONF="shared-poll" STACK=1
+   - DEFAULT=1
+   - M32=1
+   - POLL=1
+   - POLL=1 M32=1
+   - STATIC=1
+   - STATIC=1 M32=1
+   - STATIC=1 POLL=1
+   - STATIC=1 POLL=1 M32=1
+   - STACK=1 DEFAULT=1
+   - STACK=1 M32=1
+   - STACK=1 POLL=1
+   - STACK=1 POLL=1 M32=1
+   - STACK=1 STATIC=1
+   - STACK=1 STATIC=1 M32=1
+   - STACK=1 STATIC=1 POLL=1
+   - STACK=1 STATIC=1 POLL=1 M32=1
+
 
 addons:
   apt:
@@ -37,15 +48,9 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]] && [[ $CC == "clang" ]]; then brew install llvm38; fi
 
 install:
-  - if [[ $CONF == "shared" ]]      && (( $STACK == 0 )); then ./autogen.sh && ./configure && make; fi
-  - if [[ $CONF == "static" ]]      && (( $STACK == 0 )); then ./autogen.sh && ./configure --disable-shared && make; fi
-  - if [[ $CONF == "shared-poll" ]] && (( $STACK == 0 )); then ./autogen.sh && ./configure CFLAGS=-DDILL_POLL && make; fi
-  - if [[ $CC == gcc* ]] && (( $STACK == 1 )) && [[ $CONF == "shared" ]]; then ./autogen.sh && ./configure CFLAGS="-fstack-protector-all" && make; fi
-  - if [[ $CC == gcc* ]] && (( $STACK == 1 )) && [[ $CONF == "static" ]]; then ./autogen.sh && ./configure --disable-shared CFLAGS="-fstack-protector-all" && make; fi
-  - if [[ $CC == gcc* ]] && (( $STACK == 1 )) && [[ $CONF == "shared-poll" ]]; then ./autogen.sh && ./configure CFLAGS="-DDILL_POLL -fstack-protector-all" && make; fi
-  - if [[ $CC == clang* ]] && (( $STACK == 1 )) && [[ $CONF == "shared" ]]; then ./autogen.sh && ./configure CFLAGS="-fstack-protector" && make; fi
-  - if [[ $CC == clang* ]] && (( $STACK == 1 )) && [[ $CONF == "static" ]]; then ./autogen.sh && ./configure --disable-shared CFLAGS="-fstack-protector" && make; fi
-  - if [[ $CC == clang* ]] && (( $STACK == 1 )) && [[ $CONF == "shared-poll" ]]; then ./autogen.sh && ./configure CFLAGS="-DDILL_POLL -fstack-protector" && make; fi
+  - if [[ $CC == gcc* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector-all"; fi
+  - if [[ $CC == clang* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector"; fi
+  - ./autogen.sh && ./configure CFLAGS="$CFLAGS ${POLL+-DDILL_POLL} ${M32+-Dm32}" ${STATIC+--disable-shared} && make; fi
 
 script:
   - make check

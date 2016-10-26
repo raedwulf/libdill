@@ -29,7 +29,38 @@ env:
    - STACK=1 STATIC=1 M32=1
    - STACK=1 STATIC=1 POLL=1
    - STACK=1 STATIC=1 POLL=1 M32=1
-
+   - DEBUG=1 DEFAULT=1
+   - DEBUG=1 M32=1
+   - DEBUG=1 POLL=1
+   - DEBUG=1 POLL=1 M32=1
+   - DEBUG=1 STATIC=1
+   - DEBUG=1 STATIC=1 M32=1
+   - DEBUG=1 STATIC=1 POLL=1
+   - DEBUG=1 STATIC=1 POLL=1 M32=1
+   - DEBUG=1 STACK=1 DEFAULT=1
+   - DEBUG=1 STACK=1 M32=1
+   - DEBUG=1 STACK=1 POLL=1
+   - DEBUG=1 STACK=1 POLL=1 M32=1
+   - DEBUG=1 STACK=1 STATIC=1
+   - DEBUG=1 STACK=1 STATIC=1 M32=1
+   - DEBUG=1 STACK=1 STATIC=1 POLL=1
+   - DEBUG=1 STACK=1 STATIC=1 POLL=1 M32=1
+   - OPT=-O3 DEFAULT=1                     
+   - OPT=-O3 M32=1                         
+   - OPT=-O3 POLL=1                        
+   - OPT=-O3 POLL=1 M32=1                  
+   - OPT=-O3 STATIC=1                      
+   - OPT=-O3 STATIC=1 M32=1                
+   - OPT=-O3 STATIC=1 POLL=1               
+   - OPT=-O3 STATIC=1 POLL=1 M32=1         
+   - OPT=-O3 STACK=1 DEFAULT=1             
+   - OPT=-O3 STACK=1 M32=1                 
+   - OPT=-O3 STACK=1 POLL=1                
+   - OPT=-O3 STACK=1 POLL=1 M32=1          
+   - OPT=-O3 STACK=1 STATIC=1              
+   - OPT=-O3 STACK=1 STATIC=1 M32=1        
+   - OPT=-O3 STACK=1 STATIC=1 POLL=1       
+   - OPT=-O3 STACK=1 STATIC=1 POLL=1 M32=1 
 
 addons:
   apt:
@@ -50,7 +81,7 @@ before_install:
 install:
   - if [[ $CC == gcc* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector-all"; fi
   - if [[ $CC == clang* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector"; fi
-  - ./autogen.sh && ./configure CFLAGS="$CFLAGS ${POLL+-DDILL_POLL} ${M32+-Dm32}" ${STATIC+--disable-shared} && make V=1
+  - ./autogen.sh && ./configure CFLAGS="$CFLAGS ${POLL+-DDILL_POLL} ${M32+-m32} ${OPT}" ${STATIC+--disable-shared} ${DEBUG+--enable-debug} && make V=1
 
 script:
   - make check

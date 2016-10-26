@@ -8,160 +8,160 @@ matrix:
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STATIC=1
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STACK=1
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STATIC=1 STACK=1
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: DEBUG=1
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STATIC=1 DEBUG=1
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STACK=1 DEBUG=1
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STATIC=1 STACK=1 DEBUG=1
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: OPT=-O3
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STATIC=1 OPT=-O3
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STACK=1 OPT=-O3
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STATIC=1 STACK=1 OPT=-O3
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STATIC=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STACK=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-4.9
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-4.9
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
   - env:
     os: osx
     compiler: gcc-4.9
@@ -264,160 +264,160 @@ matrix:
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STATIC=1
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STACK=1
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STATIC=1 STACK=1
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: DEBUG=1
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STATIC=1 DEBUG=1
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STACK=1 DEBUG=1
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STATIC=1 STACK=1 DEBUG=1
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: OPT=-O3
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STATIC=1 OPT=-O3
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STACK=1 OPT=-O3
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STATIC=1 STACK=1 OPT=-O3
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STATIC=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STACK=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-5
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-5
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
   - env:
     os: osx
     compiler: gcc-5
@@ -520,160 +520,160 @@ matrix:
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STATIC=1
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STACK=1
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STATIC=1 STACK=1
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: DEBUG=1
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STATIC=1 DEBUG=1
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STACK=1 DEBUG=1
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STATIC=1 STACK=1 DEBUG=1
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: OPT=-O3
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STATIC=1 OPT=-O3
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STACK=1 OPT=-O3
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STATIC=1 STACK=1 OPT=-O3
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STATIC=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STACK=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: gcc-6
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - gcc-6
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
   - env:
     os: osx
     compiler: gcc-6
@@ -776,160 +776,160 @@ matrix:
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STATIC=1
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STACK=1
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STATIC=1 STACK=1
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: DEBUG=1
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STATIC=1 DEBUG=1
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STACK=1 DEBUG=1
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STATIC=1 STACK=1 DEBUG=1
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: OPT=-O3
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STATIC=1 OPT=-O3
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STACK=1 OPT=-O3
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STATIC=1 STACK=1 OPT=-O3
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: DEBUG=1 OPT=-O3
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STATIC=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STACK=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
     os: linux
     compiler: clang
     sudo: false
     addons:
       apt:
-	sources:
-	  - ubuntu-toolchain-r-test
-	packages:
-	  - clang
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - clang
   - env:
     os: osx
     compiler: clang

@@ -2,51 +2,776 @@ language: c
 
 sudo: false
 
-os:
-  - linux
-
-compiler:
-  - gcc-4.9
-  - gcc-5
-  - gcc-6
-  - clang
-
-env:
-  matrix:
-   - DEFAULT=1
-   - POLL=1
-   - STATIC=1
-   - STATIC=1 POLL=1
-   - STACK=1 DEFAULT=1
-   - STACK=1 POLL=1
-   - STACK=1 STATIC=1
-   - STACK=1 STATIC=1 POLL=1
-   - DEBUG=1 DEFAULT=1
-   - DEBUG=1 POLL=1
-   - DEBUG=1 STATIC=1
-   - DEBUG=1 STATIC=1 POLL=1
-   - DEBUG=1 STACK=1 DEFAULT=1
-   - DEBUG=1 STACK=1 POLL=1
-   - DEBUG=1 STACK=1 STATIC=1
-   - DEBUG=1 STACK=1 STATIC=1 POLL=1
-   - OPT=-O3 DEFAULT=1                     
-   - OPT=-O3 POLL=1                        
-   - OPT=-O3 STATIC=1                      
-   - OPT=-O3 STATIC=1 POLL=1               
-   - OPT=-O3 STACK=1 DEFAULT=1             
-   - OPT=-O3 STACK=1 POLL=1                
-   - OPT=-O3 STACK=1 STATIC=1              
-   - OPT=-O3 STACK=1 STATIC=1 POLL=1       
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.9
-      - gcc-5
-      - gcc-6
-      - clang
+matrix:
+  include:
+  - env:
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 POLL=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1 POLL=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 POLL=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1 STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 POLL=1 STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1 POLL=1 STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 POLL=1 STATIC=1
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 POLL=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1 POLL=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 POLL=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1 STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: STATIC=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env: POLL=1 STATIC=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-4.9
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-4.9
+  - env:
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 POLL=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1 POLL=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 POLL=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1 STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 POLL=1 STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1 POLL=1 STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 POLL=1 STATIC=1
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 POLL=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1 POLL=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 POLL=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1 STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: STATIC=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env: POLL=1 STATIC=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-5
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-5
+  - env:
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 POLL=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1 POLL=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 POLL=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1 STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 POLL=1 STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1 POLL=1 STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 POLL=1 STATIC=1
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 POLL=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1 POLL=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 POLL=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1 STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: STATIC=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
+  - env: POLL=1 STATIC=1 POLL=1 STATIC=1 OPT=-O3
+    compiler: gcc-6
+    addons:
+      apt:
+        sources:
+          - ubuntu-toolchain-r-test
+        packages:
+          - gcc-6
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update      ; fi

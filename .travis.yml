@@ -50,7 +50,7 @@ before_install:
 install:
   - if [[ $CC == gcc* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector-all"; fi
   - if [[ $CC == clang* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector"; fi
-  - ./autogen.sh && ./configure CFLAGS="$CFLAGS ${POLL+-DDILL_POLL} ${M32+-Dm32}" ${STATIC+--disable-shared} && make; fi
+  - ./autogen.sh && ./configure CFLAGS="$CFLAGS ${POLL+-DDILL_POLL} ${M32+-Dm32}" ${STATIC+--disable-shared} && make
 
 script:
   - make check

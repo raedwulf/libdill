@@ -1285,259 +1285,195 @@ matrix:
   - env:
     os: osx
     compiler: gcc
-    sudo: false
   - env:
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1
     os: osx
     compiler: clang
-    sudo: false
   - env: STATIC=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: STATIC=1
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STATIC=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STATIC=1
     os: osx
     compiler: clang
-    sudo: false
   - env: STACK=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: STACK=1
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STACK=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STACK=1
     os: osx
     compiler: clang
-    sudo: false
   - env: STATIC=1 STACK=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: STATIC=1 STACK=1
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STATIC=1 STACK=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STATIC=1 STACK=1
     os: osx
     compiler: clang
-    sudo: false
   - env: DEBUG=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: DEBUG=1
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 DEBUG=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 DEBUG=1
     os: osx
     compiler: clang
-    sudo: false
   - env: STATIC=1 DEBUG=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: STATIC=1 DEBUG=1
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STATIC=1 DEBUG=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STATIC=1 DEBUG=1
     os: osx
     compiler: clang
-    sudo: false
   - env: STACK=1 DEBUG=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: STACK=1 DEBUG=1
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STACK=1 DEBUG=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STACK=1 DEBUG=1
     os: osx
     compiler: clang
-    sudo: false
   - env: STATIC=1 STACK=1 DEBUG=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: STATIC=1 STACK=1 DEBUG=1
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STATIC=1 STACK=1 DEBUG=1
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STATIC=1 STACK=1 DEBUG=1
     os: osx
     compiler: clang
-    sudo: false
   - env: OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: STATIC=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: STATIC=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STATIC=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STATIC=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: STACK=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: STACK=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STACK=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STACK=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: STATIC=1 STACK=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: STATIC=1 STACK=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STATIC=1 STACK=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: DEBUG=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: DEBUG=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: STATIC=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: STATIC=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STATIC=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STATIC=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: STACK=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: STACK=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STACK=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STACK=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
   - env: POLL=1 STATIC=1 STACK=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: gcc
-    sudo: false
   - env: POLL=1 STATIC=1 STACK=1 DEBUG=1 OPT=-O3
     os: osx
     compiler: clang
-    sudo: false
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update      ; fi

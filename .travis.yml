@@ -741,22 +741,51 @@ matrix:
   - env: POLL=1
     os: linux
     compiler: gcc
-  - env: POLL=1
-    os: linux
-    compiler: gcc
-    dist: trusty
-  - env: STACK=1 OPT=-O3
+  - env: STACK=1 OPT=-O3 TRUSTY=1
     os: linux
     compiler: gcc-6
     dist: trusty
     sudo: required
     before_install:
       - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      - sudo add-apt-repository ppa:paulo-miguel-dias/llvm-snapshot -y
       - sudo apt-get -qq update
       - sudo apt-get install -y gcc-6
+  - env: OPT=-O3 TRUSTY=1
+    os: linux
+    compiler: clang-4.0
+    dist: trusty
+    sudo: required
+    before_install:
+      - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      - sudo add-apt-repository ppa:paulo-miguel-dias/llvm-snapshot -y
+      - sudo apt-get -qq update
+      - sudo apt-get install -y llvm-toolchain-snapshot
+  - env: STACK=1 OPT=-O3 TRUSTY=1
+    os: linux
+    compiler: clang-4.0
+    dist: trusty
+    sudo: required
+    before_install:
+      - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      - sudo add-apt-repository ppa:paulo-miguel-dias/llvm-snapshot -y
+      - sudo apt-get -qq update
+      - sudo apt-get install -y llvm-toolchain-snapshot
   - env:
     os: osx
     compiler: clang
+  - env: STATIC=1
+    os: osx
+    compiler: clang
+  - env:
+    os: osx
+    compiler: gcc
+  - env: POLL=1
+    os: osx
+    compiler: gcc
+  - env: STATIC=1
+    os: osx
+    compiler: gcc
   - env: OPT=-O3
     os: osx
     compiler: clang-3.9
@@ -769,12 +798,6 @@ matrix:
     before_install:
       - brew update
       - brew install gcc6
-  - env: POLL=1
-    os: osx
-    compiler: clang
-  - env: STATIC=1
-    os: osx
-    compiler: clang
 
 install:
   - if [[ $CC == gcc* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector-all"; fi

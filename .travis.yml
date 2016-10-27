@@ -652,7 +652,7 @@ matrix:
     sudo: required
     before_install:
       - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-      - sudo add-apt-repository ppa:paulo-miguel-dias/llvm-snapshot -y
+      - wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
       - sudo apt-get -qq update
       - sudo apt-get install -y gcc-6
   - env: OPT=-O3 TRUSTY=1
@@ -662,9 +662,9 @@ matrix:
     sudo: required
     before_install:
       - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-      - sudo add-apt-repository ppa:paulo-miguel-dias/llvm-snapshot -y
+      - wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
       - sudo apt-get -qq update
-      - sudo apt-get install -y llvm-toolchain-snapshot
+      - sudo apt-get install -y clang-4.0
   - env: STACK=1 OPT=-O3 TRUSTY=1
     os: linux
     compiler: clang-4.0
@@ -672,9 +672,9 @@ matrix:
     sudo: required
     before_install:
       - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-      - sudo add-apt-repository ppa:paulo-miguel-dias/llvm-snapshot -y
+      - wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
       - sudo apt-get -qq update
-      - sudo apt-get install -y llvm-toolchain-snapshot
+      - sudo apt-get install -y clang-4.0
   - env:
     os: osx
     compiler: clang

@@ -709,6 +709,15 @@ matrix:
   - env: POLL=1 DIST='PRECISE'
     os: linux
     compiler: gcc
+  - env: DIST='TRUSTY'
+    os: linux
+    compiler: gcc-6
+    dist: trusty
+    sudo: required
+    before_install:
+      - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      - sudo apt-get -qq update
+      - sudo apt-get install -y gcc-6
   - env: O3=1 DIST='TRUSTY'
     os: linux
     compiler: gcc-6
@@ -749,6 +758,26 @@ matrix:
       - sudo add-apt-repository 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty main'
       - sudo apt-get -qq update
       - sudo apt-get install -y clang-4.0
+  - env: DEBUG=1 M32=1 DIST='TRUSTY'
+    os: linux
+    compiler: gcc-6
+    dist: trusty
+    sudo: required
+    before_install:
+      - export CFLAGS="$CFLAGS -m32"
+      - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      - sudo apt-get -qq update
+      - sudo apt-get install -y gcc-6-multilib
+  - env: M32=1 DIST='TRUSTY'
+    os: linux
+    compiler: gcc-6
+    dist: trusty
+    sudo: required
+    before_install:
+      - export CFLAGS="$CFLAGS -m32"
+      - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      - sudo apt-get -qq update
+      - sudo apt-get install -y gcc-6-multilib
   - env: O3=1 M32=1 DIST='TRUSTY'
     os: linux
     compiler: gcc-6

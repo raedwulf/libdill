@@ -25,6 +25,8 @@ matrix:
   - env: STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -35,6 +37,8 @@ matrix:
   - env: STATIC=1 STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -65,6 +69,8 @@ matrix:
   - env: STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -75,6 +81,8 @@ matrix:
   - env: STATIC=1 STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -105,6 +113,8 @@ matrix:
   - env: STACK=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -115,6 +125,8 @@ matrix:
   - env: STATIC=1 STACK=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -145,6 +157,8 @@ matrix:
   - env: STACK=1 DEBUG=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -155,6 +169,8 @@ matrix:
   - env: STATIC=1 STACK=1 DEBUG=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -185,6 +201,8 @@ matrix:
   - env: STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -195,6 +213,8 @@ matrix:
   - env: STATIC=1 STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -225,6 +245,8 @@ matrix:
   - env: STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -235,6 +257,8 @@ matrix:
   - env: STATIC=1 STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -265,6 +289,8 @@ matrix:
   - env: STACK=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -275,6 +301,8 @@ matrix:
   - env: STATIC=1 STACK=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -305,6 +333,8 @@ matrix:
   - env: STACK=1 DEBUG=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -315,6 +345,8 @@ matrix:
   - env: STATIC=1 STACK=1 DEBUG=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -345,6 +377,8 @@ matrix:
   - env: STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -355,6 +389,8 @@ matrix:
   - env: STATIC=1 STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -385,6 +421,8 @@ matrix:
   - env: STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -395,6 +433,8 @@ matrix:
   - env: STATIC=1 STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -425,6 +465,8 @@ matrix:
   - env: STACK=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -435,6 +477,8 @@ matrix:
   - env: STATIC=1 STACK=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -465,6 +509,8 @@ matrix:
   - env: STACK=1 DEBUG=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -475,6 +521,8 @@ matrix:
   - env: STATIC=1 STACK=1 DEBUG=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
     sudo: false
     addons:
       apt:
@@ -505,6 +553,8 @@ matrix:
   - env: STACK=1 DIST='PRECISE'
     os: linux
     compiler: clang
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
     sudo: false
     addons:
       apt:
@@ -515,6 +565,8 @@ matrix:
   - env: STATIC=1 STACK=1 DIST='PRECISE'
     os: linux
     compiler: clang
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
     sudo: false
     addons:
       apt:
@@ -545,6 +597,8 @@ matrix:
   - env: STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: clang
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
     sudo: false
     addons:
       apt:
@@ -555,6 +609,8 @@ matrix:
   - env: STATIC=1 STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: clang
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
     sudo: false
     addons:
       apt:
@@ -585,6 +641,8 @@ matrix:
   - env: STACK=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: clang
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
     sudo: false
     addons:
       apt:
@@ -595,6 +653,8 @@ matrix:
   - env: STATIC=1 STACK=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: clang
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
     sudo: false
     addons:
       apt:
@@ -625,6 +685,8 @@ matrix:
   - env: STACK=1 DEBUG=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: clang
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
     sudo: false
     addons:
       apt:
@@ -635,6 +697,8 @@ matrix:
   - env: STATIC=1 STACK=1 DEBUG=1 O3=1 DIST='PRECISE'
     os: linux
     compiler: clang
+    before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
     sudo: false
     addons:
       apt:
@@ -660,6 +724,7 @@ matrix:
     dist: trusty
     sudo: required
     before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all"
       - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       - sudo apt-get -qq update
       - sudo apt-get install -y gcc-6
@@ -679,6 +744,7 @@ matrix:
     dist: trusty
     sudo: required
     before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector"
       - wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
       - sudo add-apt-repository 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty main'
       - sudo apt-get -qq update
@@ -689,6 +755,7 @@ matrix:
     dist: trusty
     sudo: required
     before_install:
+      - export CFLAGS="$CFLAGS -m32"
       - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       - sudo apt-get -qq update
       - sudo apt-get install -y gcc-6-multilib
@@ -698,6 +765,7 @@ matrix:
     dist: trusty
     sudo: required
     before_install:
+      - export CFLAGS="$CFLAGS -fstack-protector-all -m32"
       - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       - sudo apt-get -qq update
       - sudo apt-get install -y gcc-6-multilib
@@ -722,8 +790,8 @@ matrix:
     before_install:
       - brew update
       - brew install llvm
-      - export LDFLAGS=-L/usr/local/opt/llvm/lib
-      - export CPPFLAGS=-L/usr/local/opt/llvm/include
+      - export LDFLAGS="$LDFLAGS -L/usr/local/opt/llvm/lib"
+      - export CPPFLAGS="$CPPFLAGS -L/usr/local/opt/llvm/include"
       - export PATH=/usr/local/opt/llvm/bin:$PATH
   - env: O3=1
     os: osx
@@ -731,14 +799,12 @@ matrix:
     before_install:
       - brew update
       - brew install gcc6
-      - export LDFLAGS=-L/usr/local/opt/gcc6/lib
-      - export CPPFLAGS=-L/usr/local/opt/gcc6/include
+      - export LDFLAGS="$LDFLAGS -L/usr/local/opt/gcc6/lib"
+      - export CPPFLAGS="$CPPFLAGS -L/usr/local/opt/gcc6/include"
       - export PATH=/usr/local/opt/gcc6/bin:$PATH
 
 install:
-  - if [[ $CC == gcc* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector-all"; fi
-  - if [[ $CC == clang* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector"; fi
-  - ./autogen.sh && ./configure CFLAGS="$CFLAGS ${POLL+-DDILL_POLL} ${O3+-O3} ${M32+-m32}" CPPFLAGS="$CPPFLAGS" LDFLAGS="$LDFLAGS" ${STATIC+--disable-shared} ${DEBUG+--enable-debug} && make V=1
+  - ./autogen.sh && ./configure ${STATIC+--disable-shared} ${DEBUG+--enable-debug} && make V=1
 
 script:
   - make check

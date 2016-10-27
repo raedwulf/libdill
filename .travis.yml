@@ -2,7 +2,7 @@ language: c
 
 matrix:
   include:
-  - env:
+  - env: DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -12,7 +12,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1
+  - env: STATIC=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -22,7 +22,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STACK=1
+  - env: STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -32,7 +32,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 STACK=1
+  - env: STATIC=1 STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -42,7 +42,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: DEBUG=1
+  - env: DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -52,7 +52,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 DEBUG=1
+  - env: STATIC=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -62,7 +62,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STACK=1 DEBUG=1
+  - env: STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -72,7 +72,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 STACK=1 DEBUG=1
+  - env: STATIC=1 STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -82,7 +82,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: OPT=-O3
+  - env: OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -92,7 +92,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 OPT=-O3
+  - env: STATIC=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -102,7 +102,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STACK=1 OPT=-O3
+  - env: STACK=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -112,7 +112,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 STACK=1 OPT=-O3
+  - env: STATIC=1 STACK=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -122,7 +122,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: DEBUG=1 OPT=-O3
+  - env: DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -132,7 +132,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 DEBUG=1 OPT=-O3
+  - env: STATIC=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -142,7 +142,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STACK=1 DEBUG=1 OPT=-O3
+  - env: STACK=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -152,7 +152,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
+  - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-4.9
     sudo: false
@@ -162,7 +162,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-4.9
-  - env:
+  - env: DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -172,7 +172,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1
+  - env: STATIC=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -182,7 +182,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STACK=1
+  - env: STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -192,7 +192,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 STACK=1
+  - env: STATIC=1 STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -202,7 +202,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: DEBUG=1
+  - env: DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -212,7 +212,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 DEBUG=1
+  - env: STATIC=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -222,7 +222,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STACK=1 DEBUG=1
+  - env: STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -232,7 +232,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 STACK=1 DEBUG=1
+  - env: STATIC=1 STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -242,7 +242,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: OPT=-O3
+  - env: OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -252,7 +252,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 OPT=-O3
+  - env: STATIC=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -262,7 +262,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STACK=1 OPT=-O3
+  - env: STACK=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -272,7 +272,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 STACK=1 OPT=-O3
+  - env: STATIC=1 STACK=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -282,7 +282,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: DEBUG=1 OPT=-O3
+  - env: DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -292,7 +292,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 DEBUG=1 OPT=-O3
+  - env: STATIC=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -302,7 +302,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STACK=1 DEBUG=1 OPT=-O3
+  - env: STACK=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -312,7 +312,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
+  - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-5
     sudo: false
@@ -322,7 +322,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-5
-  - env:
+  - env: DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -332,7 +332,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1
+  - env: STATIC=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -342,7 +342,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STACK=1
+  - env: STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -352,7 +352,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 STACK=1
+  - env: STATIC=1 STACK=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -362,7 +362,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: DEBUG=1
+  - env: DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -372,7 +372,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 DEBUG=1
+  - env: STATIC=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -382,7 +382,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STACK=1 DEBUG=1
+  - env: STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -392,7 +392,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 STACK=1 DEBUG=1
+  - env: STATIC=1 STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -402,7 +402,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: OPT=-O3
+  - env: OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -412,7 +412,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 OPT=-O3
+  - env: STATIC=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -422,7 +422,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STACK=1 OPT=-O3
+  - env: STACK=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -432,7 +432,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 STACK=1 OPT=-O3
+  - env: STATIC=1 STACK=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -442,7 +442,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: DEBUG=1 OPT=-O3
+  - env: DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -452,7 +452,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 DEBUG=1 OPT=-O3
+  - env: STATIC=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -462,7 +462,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STACK=1 DEBUG=1 OPT=-O3
+  - env: STACK=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -472,7 +472,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
+  - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: gcc-6
     sudo: false
@@ -482,7 +482,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - gcc-6
-  - env:
+  - env: DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -492,7 +492,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STATIC=1
+  - env: STATIC=1 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -502,7 +502,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STACK=1
+  - env: STACK=1 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -512,7 +512,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STATIC=1 STACK=1
+  - env: STATIC=1 STACK=1 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -522,7 +522,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: DEBUG=1
+  - env: DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -532,7 +532,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STATIC=1 DEBUG=1
+  - env: STATIC=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -542,7 +542,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STACK=1 DEBUG=1
+  - env: STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -552,7 +552,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STATIC=1 STACK=1 DEBUG=1
+  - env: STATIC=1 STACK=1 DEBUG=1 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -562,7 +562,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: OPT=-O3
+  - env: OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -572,7 +572,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STATIC=1 OPT=-O3
+  - env: STATIC=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -582,7 +582,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STACK=1 OPT=-O3
+  - env: STACK=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -592,7 +592,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STATIC=1 STACK=1 OPT=-O3
+  - env: STATIC=1 STACK=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -602,7 +602,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: DEBUG=1 OPT=-O3
+  - env: DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -612,7 +612,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STATIC=1 DEBUG=1 OPT=-O3
+  - env: STATIC=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -622,7 +622,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STACK=1 DEBUG=1 OPT=-O3
+  - env: STACK=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -632,7 +632,7 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3
+  - env: STATIC=1 STACK=1 DEBUG=1 OPT=-O3 DIST='PRECISE'
     os: linux
     compiler: clang
     sudo: false
@@ -642,37 +642,36 @@ matrix:
           - ubuntu-toolchain-r-test
         packages:
           - clang
-  - env: POLL=1
+  - env: POLL=1 DIST='PRECISE'
     os: linux
     compiler: gcc
-  - env: STACK=1 OPT=-O3 TRUSTY=1
+  - env: STACK=1 OPT=-O3 DIST='TRUSTY'
     os: linux
     compiler: gcc-6
     dist: trusty
     sudo: required
     before_install:
       - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-      - wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
       - sudo apt-get -qq update
       - sudo apt-get install -y gcc-6
-  - env: OPT=-O3 TRUSTY=1
+  - env: OPT=-O3 DIST='TRUSTY'
     os: linux
     compiler: clang-4.0
     dist: trusty
     sudo: required
     before_install:
-      - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       - wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+      - sudo add-apt-repository 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty main'
       - sudo apt-get -qq update
       - sudo apt-get install -y clang-4.0
-  - env: STACK=1 OPT=-O3 TRUSTY=1
+  - env: STACK=1 OPT=-O3 DIST='TRUSTY'
     os: linux
     compiler: clang-4.0
     dist: trusty
     sudo: required
     before_install:
-      - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       - wget -O - http://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+      - sudo add-apt-repository 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty main'
       - sudo apt-get -qq update
       - sudo apt-get install -y clang-4.0
   - env:

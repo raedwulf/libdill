@@ -804,7 +804,8 @@ matrix:
       - export PATH=/usr/local/opt/gcc6/bin:$PATH
 
 install:
-  - ./autogen.sh && ./configure ${STATIC+--disable-shared} ${DEBUG+--enable-debug} && make V=1
+  - ./autogen.sh && ./configure ${STATIC+--disable-shared} ${DEBUG+--enable-debug}
+  - make V=1
 
 script:
   - make check

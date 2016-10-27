@@ -696,17 +696,23 @@ matrix:
     before_install:
       - brew update
       - brew install llvm
+      - export LDFLAGS=-L/usr/local/opt/llvm/lib
+      - export CPPFLAGS=-L/usr/local/opt/llvm/include
+      - export PATH=/usr/local/opt/llvm/bin:$PATH
   - env: OPT=-O3
     os: osx
     compiler: gcc-6
     before_install:
       - brew update
       - brew install gcc6
+      - export LDFLAGS=-L/usr/local/opt/gcc6/lib
+      - export CPPFLAGS=-L/usr/local/opt/gcc6/include
+      - export PATH=/usr/local/opt/gcc6/bin:$PATH
 
 install:
   - if [[ $CC == gcc* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector-all"; fi
   - if [[ $CC == clang* ]] && [[ "${STACK+1}" == "1" ]]; then CFLAGS="$CFLAGS -fstack-protector"; fi
-  - ./autogen.sh && ./configure CFLAGS="$CFLAGS ${POLL+-DDILL_POLL} ${OPT}" ${STATIC+--disable-shared} ${DEBUG+--enable-debug} && make V=1
+  - ./autogen.sh && ./configure CFLAGS="$CFLAGS ${POLL+-DDILL_POLL} ${OPT}" CPPFLAGS="$CPPFLAGS" LDFLAGS="$LDFLAGS" ${STATIC+--disable-shared} ${DEBUG+--enable-debug} && make V=1
 
 script:
   - make check

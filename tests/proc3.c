@@ -55,7 +55,8 @@ int main() {
     int test[2];
     rc = pipe(test);
     assert(rc == 0);
-    int h = go(worker(test[0]));
+    int test0 = test[0];
+    int h = go(worker(test0));
     assert(h >= 0);
     /* Fork. */
     h = proc(child(fds[1]));

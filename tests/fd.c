@@ -82,7 +82,8 @@ int main() {
     assert(diff > -20 && diff < 20);
 
     /* Check cancelation. */
-    int hndl1 = go(cancel(fds[0]));
+    int fd0 = fds[0]; /* clang's -fblocks does not support arrays in call */
+    int hndl1 = go(cancel(fd0));
     assert(hndl1 >= 0);
     rc = hclose(hndl1);
     assert(rc == 0);
@@ -98,7 +99,8 @@ int main() {
 
     /* Two interleaved deadlines. */
     int64_t start = now();
-    int hndl2 = go(trigger(fds[0], start + 50));
+    fd0 = fds[0];
+    int hndl2 = go(trigger(fd0, start + 50));
     assert(hndl2 >= 0);
     rc = fdin(fds[1], start + 90);
     assert(rc == 0);

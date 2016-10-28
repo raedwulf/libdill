@@ -53,7 +53,21 @@
 /*  Symbol visibility                                                         */
 /******************************************************************************/
 
-#if !defined __GNUC__ && !defined __clang__
+/* To simplify checks, lets define our own compiler defines */
+#if defined __clang__
+#define DILL_CLANG
+#ifdef __block
+#define DILL_BLOCKS
+#define DILL_CLOSURES
+#endif
+#elif defined __GNUC__ /* this is defined even for clang */
+#define DILL_GCC
+#define DILL_CLOSURES
+#else
+#define DILL_NOCC
+#endif
+
+#ifdef DILL_NOCC
 #error "Unsupported compiler!"
 #endif
 
@@ -93,7 +107,15 @@ DILL_EXPORT int hclose(int h);
 /*  Coroutines                                                                */
 /******************************************************************************/
 
+#if defined DILL_GCC || defined DILL_BLOCKS
+#define coroutine
+#else
+#if defined DILL_CLANG && !defined DILL_SUPPRESS_NO_BLOCKS
+#warning "-fblocks not specified, so you need to ensure all coroutines are marked with the coroutine specifier."
+#warning "also, ensure that your platform has the necessary runtime; on non-OSX platforms, try https://github.com/mackyle/blocksruntime."
+#endif
 #define coroutine __attribute__((noinline))
+#endif
 
 DILL_EXPORT extern volatile int dill_unoptimisable1;
 DILL_EXPORT extern volatile void *dill_unoptimisable2;
@@ -182,12 +204,28 @@ DILL_EXPORT void dill_proc_epilogue(void);
    Given that there's no other way to do this, screw other compilers for now.
    See https://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Statement-Exprs.html */
 
+#if defined DILL_GCC
+#define DILL_FORCE_FRAME asm volatile(""::"r"(__builtin_frame_address(0)))
+#else
+#define DILL_FORCE_FRAME \
+    int dill_anchor[dill_unoptimisable1];\
+    dill_unoptimisable2 = &dill_anchor
+#endif
+
+#ifdef DILL_BLOCKS
+#define DILL_FORCE_NOINLINE(fn) volatile __auto_type wfn = ^ {fn;}; wfn()
+#elif defined DILL_GCC
+#define DILL_FORCE_NOINLINE(fn) __attribute__((noinline)) void wfn(){fn;}; wfn()
+#else
+#define DILL_FORCE_NOINLINE(fn) fn
+#endif
+
+#ifdef DILL_NOASMSETSP
 /* Here be dragons: the VLAs are necessary to coerce the compiler to always
    generate a stack frame (they are unimplementable without a stack frame). 
    The stack frame lets fn reference the local variables, which store the
    function arguments needed, even when the stack pointer is changed. */
 
-#ifdef DILL_NOASMSETSP
 /* In newer GCCs, -fstack-protector breaks on this; use -fno-stack-protector */
 #define go(fn) \
     ({\
@@ -199,25 +237,23 @@ DILL_EXPORT void dill_proc_epilogue(void);
                 dill_unoptimisable2 = &dill_anchor;\
                 char dill_filler[(char*)&dill_anchor - (char*)hquery(h, NULL)];\
                 dill_unoptimisable2 = &dill_filler;\
-                fn;\
+                DILL_FORCE_NOINLINE(fn);\
                 dill_epilogue();\
             }\
         }\
         h;\
     })
 #else
-/* This works with newer GCCs and is a bit more optimised.
-   However, dill_setsp needs to be implemented per architecture. */
+
 #define go(fn) \
     ({\
         sigjmp_buf *ctx;\
         int h = dill_prologue(&ctx, __FILE__, __LINE__);\
         if(h >= 0) {\
             if(!dill_setjmp(*ctx)) {\
-                int dill_anchor[dill_unoptimisable1];\
-                dill_unoptimisable2 = &dill_anchor;\
+                DILL_FORCE_FRAME;\
                 dill_setsp(hquery(h, NULL));\
-                fn;\
+                DILL_FORCE_NOINLINE(fn);\
                 dill_epilogue();\
             }\
         }\

@@ -98,15 +98,20 @@ DILL_EXPORT int hclose(int h);
    Given that there's no other way to do this, screw other compilers for now.
    See https://gcc.gnu.org/onlinedocs/gcc-3.2/gcc/Statement-Exprs.html */
 
-#define coroutine __attribute__((noinline))
+#define DILL_NOINLINE __attribute__((noinline))
+#define coroutine
+//#define coroutine DILL_NOINLINE
 
 DILL_EXPORT extern volatile int dill_unoptimisable1;
 DILL_EXPORT extern volatile void *dill_unoptimisable2;
+DILL_EXPORT extern volatile void *__dillstack__;
 
-DILL_EXPORT __attribute__((noinline)) int dill_prologue(size_t stacksz, void **ctx, void **stk);
-DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
+DILL_EXPORT int dill_prologue(size_t sz, void **ctx, void **stk, int ah);
+DILL_EXPORT void dill_epilogue(void);
 DILL_EXPORT int dill_proc_prologue(int *hndl);
 DILL_EXPORT void dill_proc_epilogue(void);
+
+#include <signal.h>
 #if defined(__x86_64__)
 #define dill_setjmp(ctx) ({\
     int ret;\
@@ -128,7 +133,7 @@ DILL_EXPORT void dill_proc_epilogue(void);
         : "memory", "rcx", "r8", "r9", "r10", "r11", "cc");\
     ret;\
 })
-#define dill_longjmp(ctx) \
+#define dill_longjmp(ctx) ({\
     asm("movq   (%%rax), %%rdx\n\t"\
         "movq   8(%%rax), %%rsp\n\t"\
         "movq   16(%%rax), %%r12\n\t"\
@@ -140,11 +145,11 @@ DILL_EXPORT void dill_proc_epilogue(void);
         "movq   64(%%rax), %%rdi\n\t"\
         "movq   72(%%rax), %%rsi\n\t"\
         "jmp    *%%rdx\n\t"\
-        : : "a" (ctx) : "rdx" \
-    )
-#define dill_setsp(x) asm volatile("movq %0, %%rsp"::"r"(x))
-#define dill_getsp() ({size_t x;asm volatile("":"=rsp"(x));x;})
+        : : "a" (ctx) : "rdx");\
+})
 #define dill_sizeof_jmpbuf 80
+#define dill_setsp(x) asm volatile("movq %0, %%rsp"::"r"(x))
+#define dill_getsp() ({uintptr_t x;asm volatile("":"=rsp"(x));x;})
 #define dill_dummyuse(a) asm(""::"r"(a))
 #elif defined(__i386__)
 #define dill_setjmp(ctx) ({\
@@ -170,16 +175,19 @@ DILL_EXPORT void dill_proc_epilogue(void);
         "jmp    *%%edx\n\t"\
         : : "a" (ctx) : "edx" \
     )
-#define dill_setsp(x) asm volatile("movl %0, %%esp"::"r"(x));
-#define dill_getsp() ({size_t x;asm volatile("":"=esp"(x));x;})
 #define dill_sizeof_jmpbuf 24
+#define dill_setsp(x) asm volatile("movl %0, %%esp"::"r"(x));
+#define dill_getsp() ({uintptr_t x;asm volatile("":"=esp"(x));x;})
 #define dill_dummyuse(a) asm(""::"r"(a))
 #else
+#define DILL_NOASMSETSP
+#endif
+
+#if !defined dill_setjmp && !defined dill_longjmp && !dill_sizeof_jmpbuf
 #include <setjmp.h>
 #define dill_setjmp(ctx) sigsetjmp(*(sigjmp_buf *)ctx, 0)
 #define dill_longjmp(ctx) siglongjmp(*(sigjmp_buf *)ctx, 1)
 #define dill_sizeof_jmpbuf sizeof(sigjmp_buf)
-#define DILL_NOASMSETSP
 #endif
 
 #ifndef dill_dummyuse
@@ -187,14 +195,17 @@ DILL_EXPORT void dill_proc_epilogue(void);
 #define dill_dummyuse(a) (dill_unoptimisable2 = a)
 #endif
 
+/* FIXME: check whwther this forces a stack frame or not...
+   seems for small functions it still doesn't but when it is nested between function calls it does */
+#define dill_forcestackframe() dill_dummyuse(__builtin_frame_address(0))
+
 /* Here be dragons: without assembly, the VLAs are necessary to coerce the 
    compiler to always generate a stack frame
    (they are unimplementable without a stack frame). 
    The stack frame lets fn reference the local variables, which store the
    function arguments needed, even when the stack pointer is changed.
    This code is wrapped in dill_gosp which, with VLAs, is fragile because it is not
-   wrapped in itself.  These macros should only be used internally.
- */
+   wrapped in itself.  These macros should only be used internally. */
 
 /* In newer GCCs, -fstack-protector* breaks on VLAs and alloca, use -fno-stack-protector */
 #ifdef DILL_NOASMSETSP
@@ -227,17 +238,90 @@ void *alloca (size_t);
 /* This works with newer GCCs and is a bit more optimised.
    However, dill_setsp needs to be implemented per architecture.
    The trick here is to force the compiler to generate a stack frame by...
-   requesting it, of course.
- */
+   requesting it, of course. */
 #define dill_gosp(stk) \
-    dill_dummyuse(__builtin_frame_address(0)); \
+    dill_forcestackframe(); \
     dill_setsp(stk);
 #endif
 
-#define go(fn) \
+#ifndef dill_swapsp
+#define dill_swapsp(p)\
+    uintptr_t p1 = dill_getsp();\
+    uintptr_t p2 = *(uintptr_t *)dill_r;\
+    dill_setsp(p2);\
+    *(uintptr_t *)dill_r = p1;
+#endif
+
+struct dill_cr;
+DILL_EXPORT extern struct dill_cr *dill_r;
+
+#define scratchv(fn) ({\
+    dill_forcestackframe();\
+    dill_swapsp(*(uintptr_t *)dill_r);\
+    fn;\
+    dill_setsp(*(uintptr_t *)dill_r);\
+})
+
+#define scratchr(fn) ({\
+    dill_forcestackframe();\
+    dill_swapsp(*(uintptr_t *)dill_r);\
+    volatile __auto_type x = fn;\
+    dill_setsp(*(uintptr_t *)dill_r);\
+    x;\
+})
+
+#define DILL_ALLOC_CAPS_ZERO     0x0002
+#define DILL_ALLOC_CAPS_ALIGNED  0x0004
+#define DILL_ALLOC_CAPS_RESIZE   0x0008
+#define DILL_ALLOC_CAPS_BOOKKEEP 0x0010
+
+extern const void *alloc_type;
+struct alloc_vfs {
+    void *(*alloc)(struct alloc_vfs *, size_t *);
+    int (*free)(struct alloc_vfs *, void *);
+    ssize_t (*size)(struct alloc_vfs *);
+    int (*caps)(struct alloc_vfs *);
+};
+
+/* Memory Allocation methods are selected in two ways:
+   - If a hint, dstkbest or dstkcompat, are chosen, then choose the best out of
+     those selected here.
+   - If no hints is chosen, then these flags are mutually exclusive. stk() will
+     error with -1 and errno=ENOTSUP */
+#define DILL_ALLOC_FLAGS_DEFAULT  0x0000
+#define DILL_ALLOC_FLAGS_ZERO     0x0002
+#define DILL_ALLOC_FLAGS_GUARD    0x0020
+#define DILL_ALLOC_FLAGS_HUGE     0x0040
+
+/* Return a standard libdill memory allocator (returns a handle) */
+extern const void *amalloc_type;
+DILL_EXPORT int amalloc(size_t sz, int flags);
+
+extern const void *apage_type;
+DILL_EXPORT int apage(size_t sz, int flags);
+
+//extern const void *ammap_type;
+//DILL_EXPORT int ammap(size_t sz, int flags);
+
+extern const void *apool_type;
+DILL_EXPORT int apool(int h, int flags, size_t sz, size_t count);
+
+//extern const void *acache_type;
+//DILL_EXPORT int acache(int h, int flags, size_t sz, size_t count);
+
+DILL_EXPORT void *aalloc(int h, size_t *sz);
+DILL_EXPORT int afree(int h, void *m);
+DILL_EXPORT ssize_t asize(int h);
+DILL_EXPORT int acaps(int h);
+
+DILL_EXPORT int setstk(int h);
+DILL_EXPORT int stk();
+
+/* Use macros to simulate overloading for coroutine executor */
+#define DILL_GO_(fn, a, sz) \
     ({\
         void *ctx, *stk;\
-        int h = dill_prologue(0, &ctx, &stk);\
+        int h = dill_prologue(sz, &ctx, &stk, a);\
         if(h >= 0) {\
             if(!dill_setjmp(ctx)) {\
                 dill_gosp(stk);\
@@ -247,6 +331,11 @@ void *alloca (size_t);
         }\
         h;\
     })
+#define DILL_GO3(fn, h, sz) DILL_GO_(fn, h, sz)
+#define DILL_GO2(fn, h) DILL_GO_(fn, h, 0)
+#define DILL_GO1(fn) DILL_GO_(fn, -1, 0)
+#define DILL_GOEXP3(_1,_2,_3,NAME,...) NAME
+#define go(...) DILL_GOEXP3(__VA_ARGS__, DILL_GO3, DILL_GO2, DILL_GO1)(__VA_ARGS__)
 
 #define proc(fn) \
     ({\
@@ -258,6 +347,7 @@ void *alloca (size_t);
         h;\
     })
 
+DILL_EXPORT int setscratch(void *scratch);
 DILL_EXPORT int yield(void);
 DILL_EXPORT int msleep(int64_t deadline);
 DILL_EXPORT void fdclean(int fd);

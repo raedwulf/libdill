@@ -69,6 +69,10 @@ struct dill_cr {
     /* When coroutine handle is being closed, this is the pointer to the
        coroutine that is doing the hclose() call. */
     struct dill_cr *closer;
+    /* Allocator handle */
+    int a;
+    /* Size of the coroutine */
+    size_t sz;
 #if defined DILL_VALGRIND
     /* Valgrind stack identifier. This way valgrind knows which areas of
        memory are used as a stacks and doesn't produce spurious warnings.
@@ -245,29 +249,53 @@ static void dill_cr_close(struct hvfs *vfs);
 
 static void dill_cancel(struct dill_cr *cr, int err);
 
+int default_alloc = -1;
+
+int setstk(int h) {
+    if(dill_slow(!hquery(h, alloc_type))) {errno = ENOTSUP; return -1;}
+    default_alloc = h;
+    return 0;
+}
+
+int stk() {
+    if(default_alloc == -1) {
+        size_t blocksize = 4096 * 4096;
+        int ap = apage(blocksize, DILL_ALLOC_FLAGS_DEFAULT);
+        int ao = apool(ap, DILL_ALLOC_FLAGS_DEFAULT, 16384, blocksize / 4096);
+        setstk(ao);
+    }
+    return default_alloc;
+}
+
 /* The intial part of go(). Allocates a new stack and handle. */
-int dill_prologue(void **ctx, void **stk) {
+DILL_NOINLINE int dill_prologue(size_t sz, void **ctx, void **stack, int a) {
     /* Return ECANCELED if shutting down. */
     int rc = dill_canblock();
     if(dill_slow(rc < 0)) {errno = ECANCELED; return -1;}
     /* Allocate and initialise new stack. */
-    size_t stacksz;
-    struct dill_cr *cr = (struct dill_cr*)dill_allocstack(&stacksz);
+    a = a == -1 ? stk() : a;
+    struct alloc_vfs *avfs = hquery(a, alloc_type);
+    if(dill_slow(!avfs)) {errno = ENOTSUP; return -1;}
+    void *m = avfs->alloc(avfs, &sz);
+    if(dill_slow(!m)) return -1;
+    struct dill_cr *cr = m + sz;
     if(dill_slow(!cr)) return -1;
-    *stk = --cr;
+    *stack = --cr;
     cr->vfs.query = dill_cr_query;
     cr->vfs.close = dill_cr_close;
     int hndl = hcreate(&cr->vfs);
-    if(dill_slow(hndl < 0)) {dill_freestack(cr); errno = ENOMEM; return -1;}
+    if(dill_slow(hndl < 0)) {avfs->free(avfs, m); errno = ENOMEM; return -1;}
     dill_slist_item_init(&cr->ready);
     dill_slist_init(&cr->clauses);
+    cr->a = a;
+    cr->sz = sz;
     cr->closer = NULL;
     cr->cls = NULL;
     cr->no_blocking1 = 0;
     cr->no_blocking2 = 0;
     cr->done = 0;
 #if defined DILL_VALGRIND
-    cr->sid = VALGRIND_STACK_REGISTER((char*)(cr + 1) - stacksz, cr);
+    cr->sid = VALGRIND_STACK_REGISTER((char*)(cr + 1) - sz, cr);
 #endif
     /* Return the context of the parent coroutine to the caller so that it can
        store its current state. It can't be done here becuse we are at the
@@ -281,7 +309,7 @@ int dill_prologue(void **ctx, void **stk) {
 }
 
 /* The final part of go(). Gets called one the coroutine is finished. */
-void dill_epilogue(void) {
+DILL_NOINLINE void dill_epilogue(void) {
     /* Mark the coroutine as finished. */
     dill_r->done = 1;
     /* If there's a coroutine waiting till we finish, unblock it now. */
@@ -318,7 +346,10 @@ static void dill_cr_close(struct hvfs *vfs) {
         dill_assert(rc == -1 && errno == 0);
     }
     /* Now that the coroutine is finished deallocate it. */
-    dill_freestack(cr + 1);
+    struct alloc_vfs *avfs = hquery(cr->a, alloc_type);
+    dill_assert(avfs);
+    void *ptr = ((uint8_t*)(cr + 1)) - cr->sz;
+    avfs->free(avfs, ptr);
 }
 
 void dill_shutdown(void) {

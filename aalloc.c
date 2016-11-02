@@ -1,6 +1,6 @@
 /*
 
-  Copyright (c) 2015 Martin Sustrik
+  Copyright (c) 2016 Martin Sustrik
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"),
@@ -22,45 +22,31 @@
 
 */
 
-#include <assert.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/time.h>
+#include "libdill.h"
+#include "utils.h"
 
-#include "../libdill.h"
+dill_unique_id(alloc_type);
 
-static coroutine void worker(void) {
+void *aalloc(int h, size_t *sz) {
+    struct alloc_vfs *a = hquery(h, alloc_type);
+    if(dill_slow(!a)) return NULL;
+    return a->alloc(a, sz);
 }
 
-int main(int argc, char *argv[]) {
-    if(argc != 2) {
-        printf("usage: go <millions-of-coroutines>\n");
-        return 1;
-    }
-    long count = atol(argv[1]) * 1000000;
-
-    /* Allocate the stack before trying to benchmark */
-    stk();
-
-    int64_t start = now();
-
-    long i;
-    for(i = 0; i != count; ++i) {
-        int h = go(worker());
-        hclose(h);
-    }
-
-    int64_t stop = now();
-    long duration = (long)(stop - start);
-    long ns = (duration * 1000000) / count;
-
-    printf("executed %ldM coroutines in %f seconds\n",
-        (long)(count / 1000000), ((float)duration) / 1000);
-    printf("duration of one coroutine creation+termination: %ld ns\n", ns);
-    printf("coroutine creations+terminatios per second: %fM\n",
-        (float)(1000000000 / ns) / 1000000);
-
-    return 0;
+int afree(int h, void *m) {
+    struct alloc_vfs *a = hquery(h, alloc_type);
+    if(dill_slow(!a)) return -1;
+    return a->free(a, m);
 }
 
+ssize_t asize(int h) {
+    struct alloc_vfs *a = hquery(h, alloc_type);
+    if(dill_slow(!a)) return -1;
+    return a->size(a);
+}
+
+int acaps(int h) {
+    struct alloc_vfs *a = hquery(h, alloc_type);
+    if(dill_slow(!a)) return -1;
+    return a->caps(a);
+}

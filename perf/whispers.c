@@ -71,7 +71,7 @@ int main(int argc, char *argv[]) {
     long duration = (long)(stop - start);
     long ns = duration / count;
 
-    printf("took %f seconds\n", (float)duration / 1000);
+    printf("took %f seconds\n", (float)duration / 1000000000);
     printf("performed %ld whispers in %f seconds\n", count, ((float)duration) / 1000);
     printf("duration of one whisper: %ld ns\n", ns);
     printf("whispers per second: %fM\n",

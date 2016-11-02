@@ -32,6 +32,10 @@ dillinclude_HEADERS = libdill.h
 lib_LTLIBRARIES = libdill.la
 
 libdill_la_SOURCES = \
+    aalloc.c \
+    amalloc.c \
+    apage.c \
+    apool.c \
     chan.c \
     cr.h \
     cr.c \
@@ -49,8 +53,6 @@ libdill_la_SOURCES = \
     proc.c \
     slist.h \
     slist.c \
-    stack.h \
-    stack.c \
     utils.h
 
 pkgconfigdir = $(libdir)/pkgconfig
@@ -70,6 +72,7 @@ libdill_la_CFLAGS = \
 ################################################################################
 
 check_PROGRAMS = \
+    tests/aalloc \
     tests/example \
     tests/go \
     tests/fd \

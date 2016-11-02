@@ -43,6 +43,9 @@ int main(int argc, char *argv[]) {
     }
     long count = atol(argv[1]) * 1000000 / 2;
 
+    /* Allocate the stack before trying to benchmark */
+    stk();
+
     int64_t start = now();
     go(worker(count));
 

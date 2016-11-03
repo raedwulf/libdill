@@ -85,8 +85,7 @@ int acache(int a, int flags, size_t sz, size_t cachesz) {
     obj->sz = sz ? sz : DEFAULT_SIZE;
     obj->cachesz = cachesz ? cachesz : DEFAULT_CACHESZ;
     obj->cache = malloc(obj->cachesz * sizeof(void *));
-    obj->cachehead = 0;
-    obj->cachetail = 0;
+    obj->cachehead = obj->cachetail = obj->cachecnt = 0;
     /* Create the handle. */
     int h = hcreate(&obj->hvfs);
     if(dill_slow(h < 0)) {

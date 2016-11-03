@@ -66,7 +66,8 @@ libdill_la_LDFLAGS = -no-undefined -version-info @DILL_LIBTOOL_VERSION@
 libdill_la_CFLAGS = \
     -fvisibility=hidden\
     -DDILL_EXPORTS\
-    -D_POSIX_C_SOURCE=200112L
+    -D_POSIX_C_SOURCE=200112L\
+    -D_XOPEN_SOURCE=500
 
 ################################################################################
 #  automated tests                                                             #

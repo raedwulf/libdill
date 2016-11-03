@@ -286,7 +286,7 @@ DILL_NOINLINE int dill_prologue(size_t sz, void **ctx, void **stack, int a) {
     int rc = dill_canblock();
     if(dill_slow(rc < 0)) {errno = ECANCELED; return -1;}
     /* Allocate and initialise new stack. */
-    struct alloc_vfs *avfs = dill_fast(default_avfs && a == default_alloc)
+    struct alloc_vfs *avfs = dill_fast(default_avfs && (a == -1 || a == default_alloc))
         ? default_avfs : getalloc(a);
     if(dill_slow(!avfs)) return -1;
     void *m = avfs->alloc(avfs, &sz);

@@ -184,7 +184,10 @@ static int apage_caps(struct alloc_vfs *avfs) {
     struct apage_alloc *obj =
         dill_cont(avfs, struct apage_alloc, avfs);
     int caps = DILL_ALLOC_CAPS_RESIZE | DILL_ALLOC_CAPS_ALIGNED;
-    if(obj->flags & (DILL_ALLOC_FLAGS_ZERO)) caps |= DILL_ALLOC_CAPS_ZERO;
+    if(obj->flags & DILL_ALLOC_FLAGS_ZERO) caps |= DILL_ALLOC_CAPS_ZERO;
+#if HAVE_MPROTECT
+    if(obj->flags & DILL_ALLOC_FLAGS_GUARD) caps |= DILL_ALLOC_CAPS_GUARD;
+#endif
     return caps;
 }
 

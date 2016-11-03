@@ -103,6 +103,9 @@ int apool(int a, int flags, size_t sz, size_t count)
     /* Check that the size underlying allocator can fit a pool block */
     if(dill_slow(!(iavfs->caps(iavfs) & DILL_ALLOC_CAPS_RESIZE)))
         if(sz * count > iavfs->size(iavfs)) {errno = ENOTSUP; return -1;}
+    /* The guard page will interfere with the pool */
+    if(dill_slow(iavfs->caps(iavfs) & DILL_ALLOC_CAPS_GUARD))
+        {errno = ENOTSUP; return -1;}
     struct apool_alloc *obj = malloc(sizeof(struct apool_alloc));
     if(dill_slow(!obj)) {errno = ENOMEM; return -1;}
     obj->hvfs.query = apool_hquery;

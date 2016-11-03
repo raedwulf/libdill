@@ -274,6 +274,7 @@ DILL_EXPORT extern struct dill_cr *dill_r;
 #define DILL_ALLOC_CAPS_ALIGNED  0x0004
 #define DILL_ALLOC_CAPS_RESIZE   0x0008
 #define DILL_ALLOC_CAPS_BOOKKEEP 0x0010
+#define DILL_ALLOC_CAPS_GUARD    0x0020
 
 extern const void *alloc_type;
 struct alloc_vfs {

@@ -262,7 +262,7 @@ int setstk(int h) {
 
 int stk() {
     if(default_alloc == -1) {
-        int ap = apage(DILL_ALLOC_FLAGS_DEFAULT, 256 * 1024);
+        int ap = apage(DILL_ALLOC_FLAGS_GUARD, 256 * 1024);
         int ac = acache(ap, DILL_ALLOC_FLAGS_DEFAULT, 256 * 1024, 64);
         setstk(ac);
     }

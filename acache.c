@@ -135,7 +135,7 @@ static ssize_t acache_size(struct alloc_vfs *avfs) {
 static int acache_caps(struct alloc_vfs *avfs) {
     struct acache_alloc *obj =
         dill_cont(avfs, struct acache_alloc, avfs);
-    int caps = DILL_ALLOC_CAPS_RESIZE;
+    int caps = 0;
     if(obj->flags & (DILL_ALLOC_FLAGS_ZERO)) caps |= DILL_ALLOC_CAPS_ZERO;
     return caps;
 }

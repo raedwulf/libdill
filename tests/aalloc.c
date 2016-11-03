@@ -29,6 +29,9 @@
 
 #include "../libdill.h"
 
+coroutine void worker() {
+}
+
 int main() {
     int ac, am, ap, ao;
     size_t sz;
@@ -43,6 +46,9 @@ int main() {
     assert(!(acaps(am) & DILL_ALLOC_CAPS_ALIGNED));
     assert(!(acaps(am) & DILL_ALLOC_CAPS_BOOKKEEP));
     assert(acaps(am) & DILL_ALLOC_CAPS_RESIZE);
+    int cr1 = go(worker(), am, 8192);
+    assert(cr1 >= 0);
+    hclose(cr1);
     sz = 512;
     p = aalloc(am, &sz);
     assert(sz == 512);

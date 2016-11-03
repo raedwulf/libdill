@@ -164,6 +164,12 @@ static void *apage_alloc(struct alloc_vfs *avfs, size_t *sz) {
 }
 
 static int apage_free(struct alloc_vfs *avfs, void *p) {
+    struct apage_alloc *obj =
+        dill_cont(avfs, struct apage_alloc, avfs);
+#if HAVE_MPROTECT
+    int rc = mprotect(p, obj->pgsz, PROT_READ|PROT_WRITE);
+    dill_assert(rc == 0);
+#endif
     free(p);
     return 0;
 }

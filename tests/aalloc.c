@@ -129,6 +129,9 @@ int main() {
     assert(!(acaps(ao) & DILL_ALLOC_CAPS_ALIGNED));
     assert(!(acaps(ao) & DILL_ALLOC_CAPS_BOOKKEEP));
     assert(!(acaps(ao) & DILL_ALLOC_CAPS_RESIZE));
+    int cr2 = go(worker(), ao, 8192);
+    assert(cr2 == -1);
+    hclose(cr2);
     sz = 8;
     p = aalloc(ao, &sz);
     assert(sz == 8);

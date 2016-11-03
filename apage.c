@@ -38,7 +38,7 @@
 
 #if __STDC_VERSION__ >= 201112L
 #define dill_memalign(o, s) aligned_alloc(o->pgsz, s)
-#elif _POSIX_C_SOURCE >= 200112L
+#elif _POSIX_VERSION >= 200112L
 #define dill_memalign(o, s) ({\
     void *m = NULL;\
     int rc = posix_memalign(&m, o->pgsz, s);\

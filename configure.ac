@@ -122,11 +122,11 @@ if test "x$enable_hugepages" = "xyes" -a "x$have_mmap_hugetlb" = "xyes"; then
 fi
 
 AC_COMPILE_IFELSE(
-   [AC_LANG_PROGRAM(
-   [[#include <setjmp.h>]],
-   [[sigjmp_buf context;sigsetjmp(&context, 1);]])],
-   [have_sigsetjmp="yes"],
-   [have_sigsetjmp="no"])
+    [AC_LANG_PROGRAM(
+    [[#include <setjmp.h>]],
+    [[sigjmp_buf context;sigsetjmp(&context, 1);]])],
+    [have_sigsetjmp="yes"],
+    [have_sigsetjmp="no"])
 AC_MSG_CHECKING([for sigsetjmp])
 AC_MSG_RESULT([${have_sigsetjmp}])
 

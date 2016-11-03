@@ -295,19 +295,16 @@ struct alloc_vfs {
 
 /* Return a standard libdill memory allocator (returns a handle) */
 extern const void *amalloc_type;
-DILL_EXPORT int amalloc(size_t sz, int flags);
+DILL_EXPORT int amalloc(int flags, size_t sz);
 
 extern const void *apage_type;
-DILL_EXPORT int apage(size_t sz, int flags);
-
-//extern const void *ammap_type;
-//DILL_EXPORT int ammap(size_t sz, int flags);
+DILL_EXPORT int apage(int flags, size_t sz);
 
 extern const void *apool_type;
-DILL_EXPORT int apool(int h, int flags, size_t sz, size_t count);
+DILL_EXPORT int apool(int a, int flags, size_t sz, size_t count);
 
-//extern const void *acache_type;
-//DILL_EXPORT int acache(int h, int flags, size_t sz, size_t count);
+extern const void *acache_type;
+DILL_EXPORT int acache(int a, int flags, size_t sz, size_t cachesz);
 
 DILL_EXPORT void *aalloc(int h, size_t *sz);
 DILL_EXPORT int afree(int h, void *m);

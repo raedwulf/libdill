@@ -33,6 +33,7 @@ lib_LTLIBRARIES = libdill.la
 
 libdill_la_SOURCES = \
     aalloc.c \
+    acache.c \
     amalloc.c \
     apage.c \
     apool.c \

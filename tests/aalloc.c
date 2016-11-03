@@ -36,7 +36,7 @@ int main() {
     int rc;
     size_t pgsz = sysconf(_SC_PAGE_SIZE);
 
-    am = amalloc(512, DILL_ALLOC_FLAGS_DEFAULT);
+    am = amalloc(DILL_ALLOC_FLAGS_DEFAULT, 512);
     assert(am != -1);
     assert(asize(am) == 512);
     assert(!(acaps(am) & DILL_ALLOC_CAPS_ZERO));
@@ -56,17 +56,17 @@ int main() {
     rc = afree(am, p);
     assert(rc == 0);
     hclose(am);
-    am = amalloc(512, DILL_ALLOC_FLAGS_HUGE);
+    am = amalloc(DILL_ALLOC_FLAGS_HUGE, 512);
     assert(am == -1);
     assert(errno == ENOTSUP);
     errno = 0;
-    am = amalloc(512, DILL_ALLOC_FLAGS_GUARD);
+    am = amalloc(DILL_ALLOC_FLAGS_GUARD, 512);
     assert(am == -1);
     assert(errno == ENOTSUP);
-    am = amalloc(512, DILL_ALLOC_FLAGS_DEFAULT);
+    am = amalloc(DILL_ALLOC_FLAGS_DEFAULT, 512);
     hclose(am);
 
-    ap = apage(1, DILL_ALLOC_FLAGS_DEFAULT);
+    ap = apage(DILL_ALLOC_FLAGS_DEFAULT, 1);
     assert(ap != -1);
     assert(asize(ap) == pgsz);
     assert(!(acaps(ap) & DILL_ALLOC_CAPS_ZERO));
@@ -92,20 +92,20 @@ int main() {
     rc = afree(ap, p);
     assert(rc == 0);
     hclose(ap);
-    ap = apage(512, DILL_ALLOC_FLAGS_HUGE);
+    ap = apage(DILL_ALLOC_FLAGS_HUGE, 512);
     assert(ap == -1);
     assert(errno == ENOTSUP);
     errno = 0;
 #if HAVE_MPROTECT
-    ap = apage(512, DILL_ALLOC_FLAGS_GUARD);
+    ap = apage(DILL_ALLOC_FLAGS_GUARD, 512);
     assert(ap == 0);
     hclose(ap);
 #else
-    ap = apage(512, DILL_ALLOC_FLAGS_GUARD);
+    ap = apage(DILL_ALLOC_FLAGS_GUARD, 512);
     assert(ap == -1);
 #endif
 
-    am = amalloc(4096, DILL_ALLOC_FLAGS_ZERO);
+    am = amalloc(DILL_ALLOC_FLAGS_ZERO, 4096);
     assert(am != -1);
     assert(asize(am) == 4096);
     assert(acaps(am) & DILL_ALLOC_CAPS_ZERO);

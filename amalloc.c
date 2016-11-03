@@ -57,7 +57,7 @@ static void *amalloc_hquery(struct hvfs *hvfs, const void *type) {
     return NULL;
 }
 
-int amalloc(size_t sz, int flags) {
+int amalloc(int flags, size_t sz) {
     if(flags & (DILL_ALLOC_FLAGS_GUARD | DILL_ALLOC_FLAGS_HUGE)) {
         errno = ENOTSUP; return -1;
     }

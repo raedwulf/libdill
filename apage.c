@@ -100,7 +100,7 @@ static inline void *apage_hquery(struct hvfs *hvfs, const void *type) {
     return NULL;
 }
 
-int apage(size_t sz, int flags) {
+int apage(int flags, size_t sz) {
 #if !HAVE_MPROTECT
     if(flags & DILL_ALLOC_FLAGS_GUARD) {errno = ENOTSUP; return -1;}
 #endif

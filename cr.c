@@ -70,7 +70,7 @@ struct dill_cr {
        coroutine that is doing the hclose() call. */
     struct dill_cr *closer;
     /* Allocator handle */
-    int a;
+    struct alloc_vfs *avfs;
     /* Size of the coroutine */
     size_t sz;
 #if defined DILL_VALGRIND
@@ -249,22 +249,36 @@ static void dill_cr_close(struct hvfs *vfs);
 
 static void dill_cancel(struct dill_cr *cr, int err);
 
-int default_alloc = -1;
+static int default_alloc = -1;
+static struct alloc_vfs *default_avfs = NULL;
 
 int setstk(int h) {
-    if(dill_slow(!hquery(h, alloc_type))) {errno = ENOTSUP; return -1;}
+    struct alloc_vfs *avfs = hquery(h, alloc_type);
+    if(dill_slow(!avfs)) {errno = ENOTSUP; return -1;}
     default_alloc = h;
+    default_avfs = avfs;
+    dill_assert(avfs);
     return 0;
 }
 
 int stk() {
     if(default_alloc == -1) {
-        size_t blocksize = 4096 * 4096;
-        int ap = apage(blocksize, DILL_ALLOC_FLAGS_DEFAULT);
-        int ao = apool(ap, DILL_ALLOC_FLAGS_DEFAULT, 16384, blocksize / 4096);
-        setstk(ao);
+        int ap = apage(DILL_ALLOC_FLAGS_DEFAULT, 256 * 1024 * 1024);
+        int ac = acache(ap, DILL_ALLOC_FLAGS_DEFAULT, 256 * 1024 * 1024, 64);
+        setstk(ac);
     }
     return default_alloc;
+}
+
+static struct alloc_vfs *getalloc(int a) {
+    struct alloc_vfs *avfs;
+    a = a == -1 ? stk() : a;
+    if(dill_slow(a != default_alloc)) {
+        avfs = hquery(a, alloc_type);
+        if(dill_slow(!avfs)) {errno = ENOTSUP; return NULL;}
+    } else avfs = default_avfs;
+    dill_assert(avfs);
+    return avfs;
 }
 
 /* The intial part of go(). Allocates a new stack and handle. */
@@ -273,13 +287,12 @@ DILL_NOINLINE int dill_prologue(size_t sz, void **ctx, void **stack, int a) {
     int rc = dill_canblock();
     if(dill_slow(rc < 0)) {errno = ECANCELED; return -1;}
     /* Allocate and initialise new stack. */
-    a = a == -1 ? stk() : a;
-    struct alloc_vfs *avfs = hquery(a, alloc_type);
-    if(dill_slow(!avfs)) {errno = ENOTSUP; return -1;}
+    struct alloc_vfs *avfs = dill_fast(default_avfs && a == default_alloc)
+        ? default_avfs : getalloc(a);
+    if(dill_slow(!avfs)) return -1;
     void *m = avfs->alloc(avfs, &sz);
     if(dill_slow(!m)) return -1;
     struct dill_cr *cr = m + sz;
-    if(dill_slow(!cr)) return -1;
     *stack = --cr;
     cr->vfs.query = dill_cr_query;
     cr->vfs.close = dill_cr_close;
@@ -287,7 +300,7 @@ DILL_NOINLINE int dill_prologue(size_t sz, void **ctx, void **stack, int a) {
     if(dill_slow(hndl < 0)) {avfs->free(avfs, m); errno = ENOMEM; return -1;}
     dill_slist_item_init(&cr->ready);
     dill_slist_init(&cr->clauses);
-    cr->a = a;
+    cr->avfs = avfs;
     cr->sz = sz;
     cr->closer = NULL;
     cr->cls = NULL;
@@ -346,10 +359,8 @@ static void dill_cr_close(struct hvfs *vfs) {
         dill_assert(rc == -1 && errno == 0);
     }
     /* Now that the coroutine is finished deallocate it. */
-    struct alloc_vfs *avfs = hquery(cr->a, alloc_type);
-    dill_assert(avfs);
     void *ptr = ((uint8_t*)(cr + 1)) - cr->sz;
-    avfs->free(avfs, ptr);
+    cr->avfs->free(cr->avfs, ptr);
 }
 
 void dill_shutdown(void) {

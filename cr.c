@@ -31,7 +31,6 @@
 #include "fd.h"
 #include "libdill.h"
 #include "pollset.h"
-#include "stack.h"
 #include "utils.h"
 
 /* The coroutine. The memory layout looks like this:

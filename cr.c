@@ -398,7 +398,7 @@ int dill_prologue(sigjmp_buf **jb, void **ptr, size_t len,
 }
 
 /* The final part of go(). Gets called one the coroutine is finished. */
-void dill_epilogue(void) {
+coroutine void dill_epilogue(void) {
     struct dill_ctx *ctx = dill_ctx + dill_tid;
     /* Mark the coroutine as finished. */
     ctx->r->done = 1;

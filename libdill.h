@@ -102,7 +102,7 @@ DILL_EXPORT __attribute__((noinline)) int dill_prologue(sigjmp_buf **ctx,
     void **ptr, size_t len, const char *file, int line);
 DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
 DILL_EXPORT int dill_proc_prologue(int *hndl);
-DILL_EXPORT void dill_proc_epilogue(void);
+DILL_EXPORT coroutine void dill_proc_epilogue(void);
 
 /* In the following macros alloca(sizeof(size_t)) is used because clang
    doesn't support alloca with size zero. */

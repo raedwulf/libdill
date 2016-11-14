@@ -8,10 +8,8 @@
   the rights to use, copy, modify, merge, publish, distribute, sublicense,
   and/or sell copies of the Software, and to permit persons to whom
   the Software is furnished to do so, subject to the following conditions:
-
   The above copyright notice and this permission notice shall be included
   in all copies or substantial portions of the Software.
-
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -22,16 +20,32 @@
 
 */
 
-#ifndef DILL_STACK_INCLUDED
-#define DILL_STACK_INCLUDED
+#ifndef DILL_THREAD_INCLUDED
+#define DILL_THREAD_INCLUDED
 
-#include <stddef.h>
+#if defined DILL_THREADS
 
-/* Allocates new stack. Returns pointer to the *top* of the stack.
-   For now we assume that the stack grows downwards. */
-void *dill_allocstack(int tid, size_t *stack_size);
+//#if defined __clang__
+//#define DILL_THREAD_LOCAL __declspec(thread)
+//#elif defined __GNUC__
+//#define DILL_THREAD_LOCAL __thread
+//#endif
+#if defined __GNUC__
+#define DILL_THREAD_LOCAL __thread
+#endif
 
-/* Deallocates a stack. The argument is pointer to the top of the stack. */
-void dill_freestack(int tid, void *stack);
+#ifndef DILL_THREAD_MAX
+#define DILL_THREAD_MAX 256 
+#endif
+
+#else
+
+#define DILL_THREAD_LOCAL
+#define DILL_THREAD_MAX 1
 
 #endif
+
+extern DILL_THREAD_LOCAL int dill_tid;
+
+#endif
+

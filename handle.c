@@ -43,36 +43,41 @@ struct dill_handle {
 };
 
 #define CHECKHANDLE(h, err) \
-    if(dill_slow((h) < 0 || (h) >= dill_nhandles ||\
-          dill_handles[(h)].next != -2)) {\
+    if(dill_slow((h) < 0 || (h) >= hctx->nhandles ||\
+          hctx->handles[(h)].next != -2)) {\
         errno = EBADF; return (err);}\
-    struct dill_handle *hndl = &dill_handles[(h)];
+    struct dill_handle *hndl = &hctx->handles[(h)];
 
-static struct dill_handle *dill_handles = NULL;
-static int dill_nhandles = 0;
-static int dill_unused = -1;
+struct dill_hctx {
+    struct dill_handle *handles;
+    int nhandles;
+    int unused;
+} dill_hctx[DILL_THREAD_MAX] = {0};
 
 #if defined DILL_VALGRIND
 
 static void dill_handle_atexit(void) {
-    if(dill_handles)
-        free(dill_handles);
+    struct dill_hctx *hctx = dill_hctx + dill_tid;
+    if(hctx->handles)
+        free(hctx->handles);
 }
 
 #endif
 
 int hcreate(struct hvfs *vfs) {
+    int tid = dill_tid;
+    struct dill_hctx *hctx = dill_hctx + tid;
     if(dill_slow(!vfs || !vfs->query || !vfs->close)) {
         errno = EINVAL; return -1;}
     /* Return ECANCELED if shutting down. */
     int rc = dill_canblock();
     if(dill_slow(rc < 0)) return -1;
     /* If there's no space for the new handle expand the array. */
-    if(dill_slow(dill_unused == -1)) {
+    if(dill_slow(hctx->unused == 0)) {
         /* Start with 256 handles, double the size when needed. */
-        int sz = dill_nhandles ? dill_nhandles * 2 : 256;
+        int sz = hctx->nhandles ? hctx->nhandles * 2 : 256;
         struct dill_handle *hndls =
-            realloc(dill_handles, sz * sizeof(struct dill_handle));
+            realloc(hctx->handles, sz * sizeof(struct dill_handle));
         if(dill_slow(!hndls)) {errno = ENOMEM; return -1;}
 #if defined DILL_VALGRIND
         /* Clean-up function to delete the array at exit. It is not strictly
@@ -86,35 +91,38 @@ int hcreate(struct hvfs *vfs) {
 #endif
         /* Add newly allocated handles to the list of unused handles. */
         int i;
-        for(i = dill_nhandles; i != sz - 1; ++i)
+        for(i = hctx->nhandles; i != sz - 1; ++i)
             hndls[i].next = i + 1;
         hndls[sz - 1].next = -1;
-        dill_unused = dill_nhandles;
+        hctx->unused = hctx->nhandles + 1;
         /* Adjust the array. */
-        dill_handles = hndls;
-        dill_nhandles = sz;
+        hctx->handles = hndls;
+        hctx->nhandles = sz;
     }
     /* Return first handle from the list of unused hadles. */
-    int h = dill_unused;
-    dill_unused = dill_handles[h].next;
-    dill_handles[h].vfs = vfs;
-    dill_handles[h].refcount = 1;
-    dill_handles[h].next = -2;
+    int h = hctx->unused - 1;
+    hctx->unused = hctx->handles[h].next + 1;
+    hctx->handles[h].vfs = vfs;
+    hctx->handles[h].refcount = 1;
+    hctx->handles[h].next = -2;
     return h;
 }
 
 int hdup(int h) {
+    struct dill_hctx *hctx = dill_hctx + dill_tid;
     CHECKHANDLE(h, -1);
     ++hndl->refcount;
     return h;
 }
 
 void *hquery(int h, const void *type) {
+    struct dill_hctx *hctx = dill_hctx + dill_tid;
     CHECKHANDLE(h, NULL);
     return hndl->vfs->query(hndl->vfs, type);
 }
 
 int hclose(int h) {
+    struct dill_hctx *hctx = dill_hctx + dill_tid;
     CHECKHANDLE(h, -1);
     /* If there are multiple duplicates of this handle just remove one
        reference. */
@@ -130,8 +138,8 @@ int hclose(int h) {
     /* Restore the previous state. */
     dill_no_blocking2(old);
     /* Return the handle to the shared pool. */
-    hndl->next = dill_unused;
-    dill_unused = h;
+    hndl->next = hctx->unused - 1;
+    hctx->unused = h + 1;
     return 0;
 }
 

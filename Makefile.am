@@ -51,6 +51,8 @@ libdill_la_SOURCES = \
     slist.c \
     stack.h \
     stack.c \
+    thread.h \
+    thread.c \
     utils.h
 
 pkgconfigdir = $(libdir)/pkgconfig

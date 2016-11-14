@@ -94,6 +94,17 @@ if test "x$enable_census" = "xyes"; then
 fi
 
 ################################################################################
+#  --enable-threads                                                            #
+################################################################################
+
+AC_ARG_ENABLE([threads], [AS_HELP_STRING([--enable-threads],
+    [Enable threading support [default=no]])])
+
+if test "x$enable_threads" = "xyes"; then
+    AC_DEFINE(DILL_THREADS)
+fi
+
+################################################################################
 #  Feature checks.                                                             #
 ################################################################################
 

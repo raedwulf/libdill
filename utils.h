@@ -55,6 +55,9 @@
 /* Define our own assert. This way we are sure that it stays in place even
    if the standard C assert would be thrown away by the compiler. It also
    allows us to overload it as needed. */
+#if defined DILL_NO_ASSERT
+#define dill_assert(x)
+#else
 #define dill_assert(x) \
     do {\
         if (dill_slow(!(x))) {\
@@ -64,6 +67,7 @@
             abort();\
         }\
     } while (0)
+#endif
 
 #include "thread.h"
 

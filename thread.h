@@ -25,11 +25,6 @@
 
 #if defined DILL_THREADS
 
-//#if defined __clang__
-//#define DILL_THREAD_LOCAL __declspec(thread)
-//#elif defined __GNUC__
-//#define DILL_THREAD_LOCAL __thread
-//#endif
 #if defined __GNUC__
 #define DILL_THREAD_LOCAL __thread
 #endif

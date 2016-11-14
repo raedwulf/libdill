@@ -105,6 +105,17 @@ if test "x$enable_threads" = "xyes"; then
 fi
 
 ################################################################################
+#  --enable-asserts                                                            #
+################################################################################
+
+AC_ARG_ENABLE([asserts], [AS_HELP_STRING([--enable-asserts],
+    [Enable sanity checking through assertions [default=yes]])])
+
+if test "x$enable_asserts" = "xno"; then
+    AC_DEFINE(DILL_NO_ASSERT)
+fi
+
+################################################################################
 #  Feature checks.                                                             #
 ################################################################################
 

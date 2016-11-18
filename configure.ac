@@ -112,6 +112,10 @@ AC_CHECK_FUNCS([kqueue], [] ,[AC_DEFINE([DILL_NO_KQUEUE])])
 
 LT_INIT
 
+if test "x$enable_static" = "xyes" -a "x$enable_shared" = "xno" ; then
+    AC_DEFINE([DILL_STATIC])
+fi
+
 ################################################################################
 #  Finish the configuration phase.                                             #
 ################################################################################

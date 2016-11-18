@@ -32,14 +32,22 @@ dill_trampoline_vargs:
     mov     %rbp, 8(%r10)
     mov     %r12, 16(%r10)
     mov     %r13, 24(%r10)
+#if defined DILL_STATIC
+    lea     dill_after_trampoline, %rbx
+#else
     lea     dill_after_trampoline(%rip), %rbx
+#endif
     mov     %r14, 32(%r10)
     mov     %r15, 40(%r10)
     mov     %rsp, 48(%r10)
     mov     %rbx, 56(%r10)
     mov     16(%r11), %rsp
     call    *(%r11)
+#if defined DILL_STATIC
+    jmp     dill_epilogue
+#else
     jmp     *dill_epilogue@GOTPCREL(%rip)
+#endif
 
 dill_after_trampoline:
     retq

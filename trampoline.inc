@@ -20,9 +20,10 @@
 
 */
 
-__attribute__((optimize("-O3")))
+__attribute__((noinline))
 void dill_trampoline(struct dill_cr_info *info, ...) {
-    asm("lea     LJMPRET%=(%%rip), %%r11\n\t"
+    asm volatile(
+        "lea     LJMPRET%=(%%rip), %%r11\n\t"
         "mov     8(%%rdi), %%r10\n\t"
         "mov     %%rbx, (%%r10)\n\t"
         "mov     %%rbp, 8(%%r10)\n\t"
@@ -35,5 +36,5 @@ void dill_trampoline(struct dill_cr_info *info, ...) {
         "mov     16(%%rdi), %%rsp\n\t"
         "call    *(%%rdi)\n\t"
         "jmp     dill_epilogue\n\t"
-        "LJMPRET%=:\n\t" : : "rdi" (info));
+        "LJMPRET%=:\n\t" : : "rdi" (info) : "memory", "cc");
 }

@@ -30,7 +30,7 @@
 
 #include "../libdill.h"
 
-static coroutine void worker(struct dill_cr_info *info) {
+static coroutine void worker() {
 }
 
 int main(int argc, char *argv[]) {

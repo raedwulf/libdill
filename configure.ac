@@ -58,6 +58,7 @@ AC_MSG_NOTICE([libdill ABI version: $DILL_ABI_VERSION])
 
 AC_PROG_CC_C99
 AM_PROG_CC_C_O
+AM_PROG_AS
 
 ################################################################################
 #  --enable-debug                                                              #

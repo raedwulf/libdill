@@ -123,6 +123,14 @@ static int dill_poller_initialised = 0;
    First timer to be resumed comes first and so on. */
 static struct dill_list dill_timers;
 
+/* Information for the current trampoline. */
+struct dill_tr_info {
+    void *fn;
+    sigjmp_buf *ctx;
+    void *stk;
+    size_t len;
+} dill_tr_info;
+
 /******************************************************************************/
 /*  Helpers.                                                                  */
 /******************************************************************************/
@@ -364,6 +372,12 @@ int dill_prologue(sigjmp_buf **ctx, void **ptr, size_t len,
     return hndl;
 }
 
+/* Prepare for the trampoline-function approach. */
+int dill_prepare(void *fn, void *stk, int len, const char *file, int line) {
+    dill_tr_info.fn = fn;
+    return dill_prologue(&dill_tr_info.ctx, &dill_tr_info.stk, 0, __FILE__, __LINE__);
+}
+
 /* The final part of go(). Gets called one the coroutine is finished. */
 void dill_epilogue(void) {
     /* Mark the coroutine as finished. */
@@ -381,8 +395,6 @@ static void *dill_cr_query(struct hvfs *vfs, const void *type) {
     struct dill_cr *cr = dill_cont(vfs, struct dill_cr, vfs);
     return cr;
 }
-
-#include "trampoline.inc"
 
 /* Gets called when coroutine handle is closed. */
 static void dill_cr_close(struct hvfs *vfs) {

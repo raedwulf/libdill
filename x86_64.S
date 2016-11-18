@@ -1,5 +1,4 @@
 /*
-
   Copyright (c) 2016 Martin Sustrik
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,24 +16,29 @@
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
   FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
   IN THE SOFTWARE.
-
 */
 
-__attribute__((noinline))
-void dill_trampoline(struct dill_cr_info *info, ...) {
-    asm volatile(
-        "lea     LJMPRET%=(%%rip), %%r11\n\t"
-        "mov     8(%%rdi), %%r10\n\t"
-        "mov     %%rbx, (%%r10)\n\t"
-        "mov     %%rbp, 8(%%r10)\n\t"
-        "mov     %%r12, 16(%%r10)\n\t"
-        "mov     %%r13, 24(%%r10)\n\t"
-        "mov     %%r14, 32(%%r10)\n\t"
-        "mov     %%r15, 40(%%r10)\n\t"
-        "mov     %%rsp, 48(%%r10)\n\t"
-        "mov     %%r11, 56(%%r10)\n\t"
-        "mov     16(%%rdi), %%rsp\n\t"
-        "call    *(%%rdi)\n\t"
-        "jmp     dill_epilogue\n\t"
-        "LJMPRET%=:\n\t" : : "rdi" (info) : "memory", "cc");
-}
+.global dill_trampoline_void
+.type dill_trampoline_void,@function
+dill_trampoline_void:
+.global dill_trampoline_vargs
+.type dill_trampoline_vargs,@function
+dill_trampoline_vargs:
+
+    mov     dill_tr_info@GOTPCREL(%rip), %r11
+    mov     8(%r11), %r10
+    mov     %rbx, (%r10)
+    mov     %rbp, 8(%r10)
+    mov     %r12, 16(%r10)
+    mov     %r13, 24(%r10)
+    lea     dill_after_trampoline(%rip), %rbx
+    mov     %r14, 32(%r10)
+    mov     %r15, 40(%r10)
+    mov     %rsp, 48(%r10)
+    mov     %rbx, 56(%r10)
+    mov     16(%r11), %rsp
+    call    *(%r11)
+    jmp     *dill_epilogue@GOTPCREL(%rip)
+
+dill_after_trampoline:
+    retq

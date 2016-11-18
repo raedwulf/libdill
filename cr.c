@@ -124,7 +124,7 @@ static int dill_poller_initialised = 0;
 static struct dill_list dill_timers;
 
 /* Information for the current trampoline. */
-struct dill_tr_info {
+DILL_EXPORT struct dill_tr_info {
     void *fn;
     sigjmp_buf *ctx;
     void *stk;

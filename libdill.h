@@ -222,6 +222,26 @@ DILL_EXPORT void dill_proc_epilogue(void);
 
 #define go(fn) go_stack(fn, NULL, 0)
 
+struct dill_cr_info {
+    void *f;
+    sigjmp_buf *ctx;
+    void *stk;
+    size_t len;
+};
+
+DILL_EXPORT void dill_trampoline(struct dill_cr_info *info, ...);
+
+#define VA_ARGS(...) , ##__VA_ARGS__
+#define go2(fn, ...) \
+    ({\
+        struct dill_cr_info info;\
+        info.f = (fn);\
+        info.stk = NULL;\
+        int h = dill_prologue(&info.ctx, &info.stk, 0, __FILE__, __LINE__);\
+        if(h >= 0) dill_trampoline(&info VA_ARGS(__VA_ARGS__));\
+        h;\
+    })
+
 #define proc(fn) \
     ({\
         int h;\

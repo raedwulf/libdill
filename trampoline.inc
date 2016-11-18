@@ -1,6 +1,6 @@
 /*
 
-  Copyright (c) 2015 Martin Sustrik
+  Copyright (c) 2016 Martin Sustrik
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"),
@@ -8,10 +8,8 @@
   the rights to use, copy, modify, merge, publish, distribute, sublicense,
   and/or sell copies of the Software, and to permit persons to whom
   the Software is furnished to do so, subject to the following conditions:
-
   The above copyright notice and this permission notice shall be included
   in all copies or substantial portions of the Software.
-
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -22,42 +20,21 @@
 
 */
 
-#include <assert.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/time.h>
-
-#include "../libdill.h"
-
-static coroutine void worker(struct dill_cr_info *info) {
+__attribute__((optimize("-O3")))
+void dill_trampoline(struct dill_cr_info *info, ...) {
+    asm("lea     LJMPRET%=(%%rip), %%r11\n\t"
+        "mov     8(%%rdx), %%rcx\n\t"
+        "mov     %%rbx, (%%rcx)\n\t"\
+        "mov     %%rbp, 8(%%rcx)\n\t"\
+        "mov     %%r12, 16(%%rcx)\n\t"\
+        "mov     %%r13, 24(%%rcx)\n\t"\
+        "mov     %%r14, 32(%%rcx)\n\t"\
+        "mov     %%r15, 40(%%rcx)\n\t"\
+        "mov     %%rsp, 48(%%rcx)\n\t"\
+        "mov     %%r11, 56(%%rcx)\n\t"\
+        "mov     16(%%rdx), %%rsp\n\t"
+        "call    *(%%rdx)\n\t"
+        "jmp     dill_epilogue\n\t"
+        "LJMPRET%=:\n\t"
+        : : "d" (info) : "rcx", "r11");
 }
-
-int main(int argc, char *argv[]) {
-    if(argc != 2) {
-        printf("usage: go <millions-of-coroutines>\n");
-        return 1;
-    }
-    long count = atol(argv[1]) * 1000000;
-
-    int64_t start = now();
-
-    long i;
-    for(i = 0; i != count; ++i) {
-        int h = go2(worker);
-        hclose(h);
-    }
-
-    int64_t stop = now();
-    long duration = (long)(stop - start);
-    long ns = (duration * 1000000) / count;
-
-    printf("executed %ldM coroutines in %f seconds\n",
-        (long)(count / 1000000), ((float)duration) / 1000);
-    printf("duration of one coroutine creation+termination: %ld ns\n", ns);
-    printf("coroutine creations+terminations per second: %fM\n",
-        (float)(1000000000 / ns) / 1000000);
-
-    return 0;
-}
-

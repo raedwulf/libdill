@@ -382,6 +382,8 @@ static void *dill_cr_query(struct hvfs *vfs, const void *type) {
     return cr;
 }
 
+#include "trampoline.inc"
+
 /* Gets called when coroutine handle is closed. */
 static void dill_cr_close(struct hvfs *vfs) {
     struct dill_cr *cr = dill_cont(vfs, struct dill_cr, vfs);

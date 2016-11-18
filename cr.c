@@ -381,7 +381,7 @@ int dill_prologue(sigjmp_buf **ctx, void **ptr, size_t len,
 int dill_prepare(void *fn, void *stk, int len, const char *file, int line) {
     dill_tr_info.fn = fn;
     dill_tr_info.stk = stk;
-    return dill_cr_init(&dill_tr_info.ctx, &dill_tr_info.stk, len, __FILE__, __LINE__);
+    return dill_cr_init(&dill_tr_info.ctx, &dill_tr_info.stk, len, file, line);
 }
 
 /* The final part of go(). Gets called one the coroutine is finished. */

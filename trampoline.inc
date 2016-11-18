@@ -23,18 +23,17 @@
 __attribute__((optimize("-O3")))
 void dill_trampoline(struct dill_cr_info *info, ...) {
     asm("lea     LJMPRET%=(%%rip), %%r11\n\t"
-        "mov     8(%%rdx), %%rcx\n\t"
-        "mov     %%rbx, (%%rcx)\n\t"\
-        "mov     %%rbp, 8(%%rcx)\n\t"\
-        "mov     %%r12, 16(%%rcx)\n\t"\
-        "mov     %%r13, 24(%%rcx)\n\t"\
-        "mov     %%r14, 32(%%rcx)\n\t"\
-        "mov     %%r15, 40(%%rcx)\n\t"\
-        "mov     %%rsp, 48(%%rcx)\n\t"\
-        "mov     %%r11, 56(%%rcx)\n\t"\
-        "mov     16(%%rdx), %%rsp\n\t"
-        "call    *(%%rdx)\n\t"
+        "mov     8(%%rdi), %%r10\n\t"
+        "mov     %%rbx, (%%r10)\n\t"
+        "mov     %%rbp, 8(%%r10)\n\t"
+        "mov     %%r12, 16(%%r10)\n\t"
+        "mov     %%r13, 24(%%r10)\n\t"
+        "mov     %%r14, 32(%%r10)\n\t"
+        "mov     %%r15, 40(%%r10)\n\t"
+        "mov     %%rsp, 48(%%r10)\n\t"
+        "mov     %%r11, 56(%%r10)\n\t"
+        "mov     16(%%rdi), %%rsp\n\t"
+        "call    *(%%rdi)\n\t"
         "jmp     dill_epilogue\n\t"
-        "LJMPRET%=:\n\t"
-        : : "d" (info) : "rcx", "r11");
+        "LJMPRET%=:\n\t" : : "rdi" (info));
 }

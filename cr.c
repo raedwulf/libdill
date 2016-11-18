@@ -285,8 +285,7 @@ static void dill_cr_close(struct hvfs *vfs);
 
 static void dill_cancel(struct dill_cr *cr, int err);
 
-/* The intial part of go(). Allocates a new stack and handle. */
-int dill_prologue(sigjmp_buf **ctx, void **ptr, size_t len,
+static inline int dill_cr_init(sigjmp_buf **ctx, void **ptr, size_t len,
       const char *file, int line) {
     /* Return ECANCELED if shutting down. */
     int rc = dill_canblock();
@@ -372,11 +371,17 @@ int dill_prologue(sigjmp_buf **ctx, void **ptr, size_t len,
     return hndl;
 }
 
+/* The intial part of go(). Allocates a new stack and handle. */
+int dill_prologue(sigjmp_buf **ctx, void **ptr, size_t len,
+      const char *file, int line) {
+    return dill_cr_init(ctx, ptr, len, file, line);
+}
+
 /* Prepare for the trampoline-function approach. */
 int dill_prepare(void *fn, void *stk, int len, const char *file, int line) {
     dill_tr_info.fn = fn;
     dill_tr_info.stk = stk;
-    return dill_prologue(&dill_tr_info.ctx, &dill_tr_info.stk, len, __FILE__, __LINE__);
+    return dill_cr_init(&dill_tr_info.ctx, &dill_tr_info.stk, len, __FILE__, __LINE__);
 }
 
 /* The final part of go(). Gets called one the coroutine is finished. */

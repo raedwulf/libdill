@@ -26,17 +26,14 @@ dill_trampoline_void:
 .type dill_trampoline_vargs,@function
 dill_trampoline_vargs:
 
+    add     $8, %rsp
     mov     dill_tr_info@GOTPCREL(%rip), %r11
     mov     8(%r11), %r10
     mov     %rbx, (%r10)
     mov     %rbp, 8(%r10)
     mov     %r12, 16(%r10)
     mov     %r13, 24(%r10)
-#if defined DILL_STATIC
-    lea     dill_after_trampoline, %rbx
-#else
-    lea     dill_after_trampoline(%rip), %rbx
-#endif
+    mov     -8(%rsp), %rbx
     mov     %r14, 32(%r10)
     mov     %r15, 40(%r10)
     mov     %rsp, 48(%r10)
@@ -48,6 +45,3 @@ dill_trampoline_vargs:
 #else
     jmp     *dill_epilogue@GOTPCREL(%rip)
 #endif
-
-dill_after_trampoline:
-    retq

@@ -375,7 +375,8 @@ int dill_prologue(sigjmp_buf **ctx, void **ptr, size_t len,
 /* Prepare for the trampoline-function approach. */
 int dill_prepare(void *fn, void *stk, int len, const char *file, int line) {
     dill_tr_info.fn = fn;
-    return dill_prologue(&dill_tr_info.ctx, &dill_tr_info.stk, 0, __FILE__, __LINE__);
+    dill_tr_info.stk = stk;
+    return dill_prologue(&dill_tr_info.ctx, &dill_tr_info.stk, len, __FILE__, __LINE__);
 }
 
 /* The final part of go(). Gets called one the coroutine is finished. */

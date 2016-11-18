@@ -223,11 +223,11 @@ DILL_EXPORT void dill_proc_epilogue(void);
 #define go(fn) go_stack(fn, NULL, 0)
 
 DILL_EXPORT int dill_prepare(void *fn, void *stk, int len, const char *file, int line);
-DILL_EXPORT void dill_trampoline_vargs(size_t first, ...);
+DILL_EXPORT void dill_trampoline_vargs(void *first, ...);
 DILL_EXPORT void dill_trampoline_void(void);
 
 /* DILL_NARG calculates the number of arguments in __VA_ARGS__ */
-#define DILL_NARG(...)  DILL_NARG_I_(__VA_ARGS__,DILL_RSEQ_N())
+#define DILL_NARG(...)  DILL_NARG_I_(_0, ## __VA_ARGS__,DILL_RSEQ_N())
 #define DILL_NARG_I_(...) DILL_ARG_N(__VA_ARGS__)
 #define DILL_ARG_N(a,b,c,d,e,f,g,h,i,j,N,...) N
 #define DILL_RSEQ_N() 9,8,7,6,5,4,3,2,1,0
@@ -242,20 +242,20 @@ DILL_EXPORT void dill_trampoline_void(void);
 /* All the overloaded dill_trampoline arguments. */
 #define dill_trampoline(...) DILL_FUNC(dill_trampoline, __VA_ARGS__)
 #define dill_trampoline0() dill_trampoline_void()
-#define dill_trampoline1(a) dill_trampoline_vargs((size_t)(a))
-#define dill_trampoline2(a,b) dill_trampoline_vargs((size_t)(a),b)
-#define dill_trampoline3(a,b,c) dill_trampoline_vargs((size_t)(a),b,c)
-#define dill_trampoline4(a,b,c,d) dill_trampoline_vargs((size_t)(a),b,c,d)
-#define dill_trampoline5(a,b,c,d,e) dill_trampoline_vargs((size_t)(a),b,c,d,e)
-#define dill_trampoline6(a,b,c,d,e,f) dill_trampoline_vargs((size_t)(a),b,c,d,e,f)
-#define dill_trampoline7(a,b,c,d,e,f,g) dill_trampoline_vargs((size_t)(a),b,c,d,e,f,g)
-#define dill_trampoline8(a,b,c,d,e,f,g,h) dill_trampoline_vargs((size_t)(a),b,c,d,e,f,g,h)
-#define dill_trampoline9(a,b,c,d,e,f,g,h,i) dill_trampoline_vargs((size_t)(a),b,c,d,e,f,g,h,i)
+#define dill_trampoline1(a) dill_trampoline_vargs((void *)(a))
+#define dill_trampoline2(a,b) dill_trampoline_vargs((void *)(a),b)
+#define dill_trampoline3(a,b,c) dill_trampoline_vargs((void *)(a),b,c)
+#define dill_trampoline4(a,b,c,d) dill_trampoline_vargs((void *)(a),b,c,d)
+#define dill_trampoline5(a,b,c,d,e) dill_trampoline_vargs((void *)(a),b,c,d,e)
+#define dill_trampoline6(a,b,c,d,e,f) dill_trampoline_vargs((void *)(a),b,c,d,e,f)
+#define dill_trampoline7(a,b,c,d,e,f,g) dill_trampoline_vargs((void *)(a),b,c,d,e,f,g)
+#define dill_trampoline8(a,b,c,d,e,f,g,h) dill_trampoline_vargs((void *)(a),b,c,d,e,f,g,h)
+#define dill_trampoline9(a,b,c,d,e,f,g,h,i) dill_trampoline_vargs((void *)(a),b,c,d,e,f,g,h,i)
 
 #define go2(fn, ...) \
     ({\
         int h = dill_prepare(fn, NULL, 0, __FILE__, __LINE__);\
-        if(h >= 0) dill_trampoline();\
+        if(h >= 0) dill_trampoline(__VA_ARGS__);\
         h;\
     })
 

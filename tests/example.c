@@ -37,11 +37,11 @@ coroutine void worker(int count, const char *text) {
 }
 
 int main() {
-    int cr1 = go(worker(4, "a "));
+    int cr1 = go2(worker, 4, "a ");
     errno_assert(cr1 >= 0);
-    int cr2 = go(worker(2, "b"));
+    int cr2 = go2(worker, 2, "b");
     errno_assert(cr2 >= 0);
-    int cr3 = go(worker(3, "c"));
+    int cr3 = go2(worker, 3, "c");
     errno_assert(cr3 >= 0);
     int rc = msleep(now() + 100);
     errno_assert(rc == 0); 

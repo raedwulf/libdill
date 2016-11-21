@@ -31,6 +31,7 @@
 #include "cr.h"
 #include "libdill.h"
 #include "utils.h"
+#include "thread.h"
 
 struct dill_handle {
     /* Table of virtual functions. */

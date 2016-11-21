@@ -69,7 +69,5 @@
     } while (0)
 #endif
 
-#include "thread.h"
-
 #endif
 

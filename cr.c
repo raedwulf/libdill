@@ -36,6 +36,7 @@
 #include "pollset.h"
 #include "stack.h"
 #include "utils.h"
+#include "thread.h"
 
 #if defined DILL_CENSUS
 

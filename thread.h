@@ -25,8 +25,15 @@
 
 #if defined DILL_THREADS
 
-#if defined __GNUC__
+#include <limits.h>
+
+/* Thread local storage support */
+#if (__STDC_VERSION__ >= 201112L) && (__STDC_NO_THREADS__ != 1)
+#define DILL_THREAD_LOCAL _Thread_local
+#elif defined __GNUC__
 #define DILL_THREAD_LOCAL __thread
+#else
+#error "No TLS support"
 #endif
 
 #ifndef DILL_THREAD_MAX

@@ -247,15 +247,5 @@ DILL_EXPORT int chdone(int ch);
 DILL_EXPORT int choose(struct chclause *clauses, int nclauses,
     int64_t deadline);
 
-/******************************************************************************/
-/*  Threads                                                                   */
-/******************************************************************************/
-
-#ifdef DILL_THREADS
-
-DILL_EXPORT int thread(int func (void *), void *arg);
-
-#endif
-
 #endif
 

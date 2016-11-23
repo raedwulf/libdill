@@ -111,6 +111,7 @@ volatile void *dill_unoptimisable = NULL;
 /* Main coroutine. */
 struct dill_cr dill_main_data = {DILL_SLIST_ITEM_INITIALISER};
 
+/* Current coroutine context */
 struct dill_ctx {
     struct dill_cr *main;
     /* Currently running coroutine. */
@@ -127,7 +128,10 @@ struct dill_ctx {
     int census_initialized;
     struct dill_slist census;
 #endif
-} dill_ctx[DILL_THREAD_MAX] = {0};
+};
+
+struct dill_ctx dill_main_ctx = {&dill_main_data};
+struct dill_ctx *dill_ctx = &dill_main_ctx;
 
 static inline int dill_wait_ctx(struct dill_ctx *ctx);
 static inline int dill_canblock_tid(int tid);

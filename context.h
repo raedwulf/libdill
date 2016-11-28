@@ -8,10 +8,8 @@
   the rights to use, copy, modify, merge, publish, distribute, sublicense,
   and/or sell copies of the Software, and to permit persons to whom
   the Software is furnished to do so, subject to the following conditions:
-
   The above copyright notice and this permission notice shall be included
   in all copies or substantial portions of the Software.
-
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -22,25 +20,39 @@
 
 */
 
-#ifndef DILL_STACK_INCLUDED
-#define DILL_STACK_INCLUDED
+#ifndef DILL_THREAD_INCLUDED
+#define DILL_THREAD_INCLUDED
 
-#include <stddef.h>
+#if defined DILL_THREADS
 
-struct dill_ctx_stack;
-extern struct dill_ctx_stack dill_ctx_stack_main_data;
+#include <limits.h>
 
-/* Initialises internal structures. */
-int dill_initstack(void);
+/* Thread local storage support */
+#if (__STDC_VERSION__ >= 201112L) && (__STDC_NO_THREADS__ != 1)
+#define DILL_THREAD_LOCAL _Thread_local
+#elif defined __GNUC__
+#define DILL_THREAD_LOCAL __thread
+#else
+#error "No TLS support"
+#endif
 
-/* Release internal structures. */
-void dill_termstack(void);
+#else
 
-/* Allocates new stack. Returns pointer to the *top* of the stack.
-   For now we assume that the stack grows downwards. */
-void *dill_allocstack(size_t *stack_size);
-
-/* Deallocates a stack. The argument is pointer to the top of the stack. */
-void dill_freestack(void *stack);
+#define DILL_THREAD_LOCAL
 
 #endif
+
+struct dill_ctx_cr;
+struct dill_ctx_handle;
+struct dill_ctx_stack;
+
+struct dill_ctx {
+    struct dill_ctx_cr *cr;
+    struct dill_ctx_handle *handle;
+    struct dill_ctx_stack *stack;
+};
+
+extern DILL_THREAD_LOCAL struct dill_ctx dill_context;
+
+#endif
+

@@ -22,25 +22,18 @@
 
 */
 
-#ifndef DILL_STACK_INCLUDED
-#define DILL_STACK_INCLUDED
+#ifndef DILL_HANDLE_INCLUDED
+#define DILL_HANDLE_INCLUDED
 
 #include <stddef.h>
 
-struct dill_ctx_stack;
-extern struct dill_ctx_stack dill_ctx_stack_main_data;
+struct dill_ctx_handle;
+extern struct dill_ctx_handle dill_ctx_handle_main_data;
 
 /* Initialises internal structures. */
-int dill_initstack(void);
+int dill_inithandle(void);
 
 /* Release internal structures. */
-void dill_termstack(void);
-
-/* Allocates new stack. Returns pointer to the *top* of the stack.
-   For now we assume that the stack grows downwards. */
-void *dill_allocstack(size_t *stack_size);
-
-/* Deallocates a stack. The argument is pointer to the top of the stack. */
-void dill_freestack(void *stack);
+void dill_termhandle(void);
 
 #endif

@@ -8,8 +8,10 @@
   the rights to use, copy, modify, merge, publish, distribute, sublicense,
   and/or sell copies of the Software, and to permit persons to whom
   the Software is furnished to do so, subject to the following conditions:
+
   The above copyright notice and this permission notice shall be included
   in all copies or substantial portions of the Software.
+
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
@@ -20,28 +22,18 @@
 
 */
 
-#include "context.h"
-#include "cr.h"
-#include "handle.h"
-#include "stack.h"
+#ifndef DILL_HANDLE_INCLUDED
+#define DILL_HANDLE_INCLUDED
 
-DILL_THREAD_LOCAL struct dill_ctx dill_context = {
-    .cr = &dill_ctx_cr_main_data,
-    .handle = &dill_ctx_handle_main_data,
-    .stack = &dill_ctx_stack_main_data,
-};
+#include <stddef.h>
 
-int ctxinit(void) {
-    int rc = dill_inithandle();
-    if(dill_slow(!rc)) return rc;
-    rc = dill_initstack();
-    if(dill_slow(!rc)) return rc;
-    rc = dill_initcr();
-    return rc;
-}
+struct dill_ctx_handle;
+extern struct dill_ctx_handle dill_ctx_handle_main_data;
 
-void ctxterm(void) {
-    dill_termcr();
-    dill_termhandle();
-    dill_termstack();
-}
+/* Initialises internal structures. */
+int dill_inithandle(void);
+
+/* Release internal structures. */
+void dill_termhandle(void);
+
+#endif

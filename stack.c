@@ -25,6 +25,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 #include <unistd.h>
 #include <sys/mman.h>
@@ -32,7 +33,7 @@
 #include "slist.h"
 #include "stack.h"
 #include "utils.h"
-#include "thread.h"
+#include "context.h"
 
 /* The stacks are cached. The advantage is twofold. First, caching is
    faster than malloc(). Second, it results in smaller number of calls to
@@ -46,14 +47,52 @@ static int dill_max_cached_stacks = 64;
    of a new stack. The LIFO nature of this structure minimises cache misses.
    When the stack is cached its dill_slist_item is placed on its top rather
    then on the bottom. That way we minimise page misses. */
-struct dill_stack {
+struct dill_ctx_stack {
     int count;
     struct dill_slist cache;
-} dill_stack[DILL_THREAD_MAX] = {0};
-
 #if defined DILL_VALGRIND
-DILL_THREAD_LOCAL int dill_stack_initialized = 0;
+    int initialized;
 #endif
+};
+
+struct dill_ctx_stack dill_ctx_stack_defaults = {0};
+struct dill_ctx_stack dill_ctx_stack_main_data = {0};
+struct dill_ctx_stack *dill_ctx_stack_main = &dill_ctx_stack_main_data;
+
+/* Intialisation function for stack context */
+int dill_initstack(void) {
+    struct dill_ctx_stack *ctx = malloc(sizeof(struct dill_ctx_stack));
+    if(dill_slow(!ctx)) return -1;
+    memcpy(ctx, &dill_ctx_stack_defaults, sizeof(struct dill_ctx_stack));
+    dill_context.stack = ctx;
+    return 0;
+}
+
+/* Termination function for stack context */
+void dill_termstack(void) {
+    struct dill_ctx_stack *s = dill_context.stack;
+    if(!s) return;
+#if defined DILL_VALGRIND
+    struct dill_slist_item *it;
+    while(it = dill_slist_pop(&s->cache)) {
+      /* If the stack cache is full deallocate the stack. */
+#if (HAVE_POSIX_MEMALIGN && HAVE_MPROTECT) & !defined DILL_NOGUARD
+      void *ptr = ((uint8_t*)(it + 1)) - dill_stack_size - dill_page_size();
+      int rc = mprotect(ptr, dill_page_size(), PROT_READ|PROT_WRITE);
+      dill_assert(rc == 0);
+      free(ptr);
+#else
+      void *ptr = ((uint8_t*)(it + 1)) - dill_stack_size;
+      free(ptr);
+#endif
+    }
+#endif
+    /* Ensure that we are not in the main thread. */
+    if(dill_context.stack != dill_ctx_stack_main) {
+        free(dill_context.stack);
+        dill_context.stack = NULL;
+    }
+}
 
 /* Returns smallest value greater than val that is a multiply of unit. */
 static size_t dill_align(size_t val, size_t unit) {
@@ -73,29 +112,17 @@ static size_t dill_page_size(void) {
 #if defined DILL_VALGRIND
 
 static void dill_stack_atexit(void) {
-    struct dill_slist_item *it;
-    while(it = dill_slist_pop(&s->cache)) {
-      /* If the stack cache is full deallocate the stack. */
-#if (HAVE_POSIX_MEMALIGN && HAVE_MPROTECT) & !defined DILL_NOGUARD
-      void *ptr = ((uint8_t*)(it + 1)) - dill_stack_size - dill_page_size();
-      int rc = mprotect(ptr, dill_page_size(), PROT_READ|PROT_WRITE);
-      dill_assert(rc == 0);
-      free(ptr);
-#else
-      void *ptr = ((uint8_t*)(it + 1)) - dill_stack_size;
-      free(ptr);
-#endif
-    }
+    dill_termstack();
 }
 
 #endif
 
-void *dill_allocstack(int tid, size_t *stack_size) {
-    struct dill_stack *s = dill_stack + tid;
+void *dill_allocstack(size_t *stack_size) {
+    struct dill_ctx_stack *s = dill_context.stack;
 #if defined DILL_VALGRIND
     /* When using valgrind we want to deallocate cached stacks when
        the process is terminated so that they don't show up in the output. */
-    if(dill_slow(!dill_stack_initialized)) {
+    if(dill_slow(!s->initialized)) {
         int rc = atexit(dill_stack_atexit);
         dill_assert(rc == 0);
         initialized = 1;
@@ -143,8 +170,8 @@ void *dill_allocstack(int tid, size_t *stack_size) {
     return top;
 }
 
-void dill_freestack(int tid, void *stack) {
-    struct dill_stack *s = dill_stack + tid;
+void dill_freestack(void *stack) {
+    struct dill_ctx_stack *s = dill_context.stack;
     struct dill_slist_item *item = ((struct dill_slist_item*)stack) - 1;
     /* If there are free slots in the cache put the stack to the cache. */
     if(s->count < dill_max_cached_stacks) {

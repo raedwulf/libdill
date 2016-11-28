@@ -47,7 +47,17 @@
 
 #endif
 
-extern DILL_THREAD_LOCAL int dill_tid;
+struct dill_ctx_cr;
+struct dill_ctx_handle;
+struct dill_ctx_stack;
+
+struct dill_ctx {
+    struct dill_ctx_cr *cr;
+    struct dill_ctx_handle *handle;
+    struct dill_ctx_stack *stack;
+};
+
+extern DILL_THREAD_LOCAL struct dill_ctx dill_context;
 
 #endif
 

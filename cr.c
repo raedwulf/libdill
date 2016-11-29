@@ -100,7 +100,7 @@ struct dill_cr {
     struct dill_census_item *census;
     size_t stacksz;
 #endif
-} __attribute__((aligned(16),packed));
+};
 
 /* Storage for constant used by go() macro. */
 volatile void *dill_unoptimisable = NULL;
@@ -177,7 +177,7 @@ static void dill_census_atexit(void) {
 }
 #endif
 
-static inline void dill_resume(struct dill_cr *cr, int id, int err) {
+static void dill_resume(struct dill_cr *cr, int id, int err) {
     struct dill_ctx_cr *ctx = dill_context.cr;
     cr->id = id;
     cr->err = err;
@@ -482,7 +482,7 @@ void dill_waitfor(struct dill_clause *cl, int id,
     cl->id = id;
 }
 
-inline int dill_wait(void)  {
+int dill_wait(void)  {
 /* Even if process never gets idle, we have to process external events
    once in a while. The external signal may very well be a deadline or
    a user-issued command that cancels the CPU intensive operation. */

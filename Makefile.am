@@ -38,6 +38,7 @@ libdill_la_SOURCES = \
     epoll.inc \
     fd.h \
     fd.c \
+    handle.h \
     handle.c \
     kqueue.inc \
     libdill.c \

@@ -57,7 +57,6 @@ struct dill_ctx_stack {
 
 struct dill_ctx_stack dill_ctx_stack_defaults = {0};
 struct dill_ctx_stack dill_ctx_stack_main_data = {0};
-struct dill_ctx_stack *dill_ctx_stack_main = &dill_ctx_stack_main_data;
 
 /* Returns smallest value greater than val that is a multiply of unit. */
 static size_t dill_align(size_t val, size_t unit) {
@@ -103,10 +102,9 @@ void dill_termstack(void) {
     }
 #endif
     /* Ensure that we are not in the main thread. */
-    if(ctx != dill_ctx_stack_main) {
-        free(dill_context.stack);
-        dill_context.stack = NULL;
-    }
+    if(ctx == &dill_ctx_stack_main_data) return;
+    free(dill_context.stack);
+    dill_context.stack = NULL;
 }
 
 #if defined DILL_VALGRIND

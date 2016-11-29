@@ -129,7 +129,6 @@ struct dill_ctx_cr {
 
 const struct dill_ctx_cr dill_ctx_cr_defaults = {0};
 struct dill_ctx_cr dill_ctx_cr_main_data = {&dill_main_data, &dill_main_data};
-struct dill_ctx_cr *dill_ctx_cr_main = &dill_ctx_cr_main_data;
 
 /******************************************************************************/
 /*  Context.                                                                  */
@@ -159,11 +158,10 @@ void dill_termcr(void) {
     }
 #endif
     /* Ensure that we are not in the main thread. */
-    if(ctx != dill_ctx_cr_main) {
-        free(dill_context.cr->main);
-        free(dill_context.cr);
-        dill_context.cr = NULL;
-    }
+    if(ctx == &dill_ctx_cr_main_data) return;
+    free(dill_context.cr->main);
+    free(dill_context.cr);
+    dill_context.cr = NULL;
 }
 
 /******************************************************************************/

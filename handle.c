@@ -62,7 +62,6 @@ struct dill_ctx_handle {
 
 struct dill_ctx_handle dill_ctx_handle_defaults = {NULL, 0, -1};
 struct dill_ctx_handle dill_ctx_handle_main_data = {NULL, 0, -1};
-struct dill_ctx_handle *dill_ctx_handle_main = &dill_ctx_handle_main_data;
 
 /* Initialisation function for the handle context. */
 int dill_inithandle(void) {
@@ -80,10 +79,9 @@ void dill_termhandle(void) {
     if(ctx->handles)
         free(ctx->handles);
     /* Ensure that we are not in the main thread. */
-    if(ctx != dill_ctx_handle_main) {
-        free(ctx);
-        dill_context.handle = NULL;
-    }
+    if(ctx == &dill_ctx_handle_main_data) return;
+    free(ctx);
+    dill_context.handle = NULL;
 }
 
 #if defined DILL_VALGRIND

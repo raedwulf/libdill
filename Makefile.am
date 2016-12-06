@@ -107,8 +107,11 @@ noinst_PROGRAMS = \
     perf/go\
     perf/ctxswitch\
     perf/chan\
+    perf/choose\
     perf/chsend\
     perf/chrecv\
+    perf/choosesend\
+    perf/chooserecv\
     perf/whispers
 
 ################################################################################

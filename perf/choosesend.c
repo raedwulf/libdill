@@ -44,8 +44,8 @@ int main(int argc, char *argv[]) {
 
     long i;
     char val = 0;
-    struct chclause cls[] = {{CHSEND, ch, &val, sizeof(val)}};
     for(i = 0; i != count; ++i) {
+        struct chclause cls[] = {{CHSEND, ch, &val, sizeof(val)}};
         int rc = choose(cls, 1, -1);
         assert(rc == 0);
     }

@@ -49,8 +49,8 @@ int main(int argc, char *argv[]) {
 
     int64_t start = now();
 
-    struct chclause cls[] = {{CHRECV, ch, &val, sizeof(val)}};
     for(i = 0; i != count; ++i) {
+        struct chclause cls[] = {{CHRECV, ch, &val, sizeof(val)}};
         int rc = choose(cls, 1, -1);
         assert(rc == 0);
     }

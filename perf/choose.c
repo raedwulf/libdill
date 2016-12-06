@@ -53,9 +53,9 @@ int main(int argc, char *argv[]) {
 
     int val = 0;
     long i;
-    struct chclause clsout[] = {{CHSEND, out, &val, sizeof(val)}};
-    struct chclause clsin[] = {{CHRECV, in, &val, sizeof(val)}};
     for(i = 0; i != count; ++i) {
+        struct chclause clsout[] = {{CHSEND, out, &val, sizeof(val)}};
+        struct chclause clsin[] = {{CHRECV, in, &val, sizeof(val)}};
         choose(clsout, 1, -1);
         choose(clsin, 1, -1);
     }

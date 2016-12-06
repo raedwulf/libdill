@@ -108,6 +108,7 @@ noinst_PROGRAMS = \
     perf/ctxswitch\
     perf/chan\
     perf/choose\
+    perf/chdone\
     perf/chsend\
     perf/chrecv\
     perf/choosesend\

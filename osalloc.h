@@ -71,11 +71,18 @@ static inline void *dill_memalign(size_t pgsz, size_t s) {
 #define dill_malloc(p,s) malloc(s);
 #define dill_calloc(p,s) calloc(s, 1);
 
-#define dill_alloc(method, zero, pgsz, sz) ({\
-    void *stack = dill_ ## method(pgsz, sz);\
-    if(zero) memset(stack, 0, sz);\
-    stack;\
-})
+//#define dill_alloc(method, zero, pgsz, sz) ({\
+//    void *stack = dill_ ## method(pgsz, sz);\
+//    if(zero) memset(stack, 0, sz);\
+//    stack;\
+//})
+#define dill_alloc(method, zero, pgsz, sz) dill_alloc_memalign(zero, pgsz, sz)
+
+static inline void *dill_alloc_memalign(int zero, size_t pgsz, size_t sz) {
+    void *stack = dill_memalign(pgsz, sz);
+    if(zero) memset(stack, 0, sz);
+    return stack;
+}
 
 static inline int dill_guard(void *ptr, size_t pgsz) {
 #if HAVE_MPROTECT

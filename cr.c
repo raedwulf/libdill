@@ -290,6 +290,7 @@ DILL_NOINLINE int dill_prologue(void **ctx, void **ptr, size_t len,
     if(!*ptr) {
         /* Allocate new stack. */
         cr = (struct dill_cr*)dill_allocstack(&stacksz);
+        stacksz = DILL_STACK_SIZE;
         if(dill_slow(!cr)) return -1;
     }
     else {

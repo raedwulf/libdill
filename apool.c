@@ -164,9 +164,13 @@ int apool(int flags, size_t sz, size_t count)
     dill_assert(obj->blocktotal > 0);
 #ifdef DILL_VALGRIND
     debug("memblock => %lp\n", obj->nextblock);
+    /* Create mempool for first object. */
     VALGRIND_CREATE_MEMPOOL(obj->nextblock, 0,
         !!(flags & DILL_ALLOC_FLAGS_ZERO));
+    /* Create mempool for the freelist. */
+    VALGRIND_CREATE_MEMPOOL(obj, 0, 1);
     VALGRIND_MAKE_MEM_NOACCESS(p, blocksize);
+    VALGRIND_MEMPOOL_ALLOC(obj, p + obj->offset, sizeof(void *));
 #endif
     *obj->nextblock++ = p;
     obj->blockcount = 1;
@@ -242,6 +246,9 @@ static int apool_extend(struct apool_alloc *obj) {
     obj->blockcount++;
     *obj->nextblock++ = p;
     obj->freelist = p;
+#ifdef DILL_VALGRIND
+    VALGRIND_MEMPOOL_ALLOC(obj, p + obj->offset, sizeof(void *));
+#endif
     obj->blocktotal += (obj->elsize * obj->elcount) / sizeof(void *) - 1;
     return 0;
 }
@@ -261,14 +268,25 @@ static void *apool_alloc(struct alloc_vfs *avfs) {
     void *b = apool_findblock(obj, obj->freelist);
     dill_assert(b);
     debug("memblock => %lp alloc = %lp\n", b, obj->freelist);
-    VALGRIND_MEMPOOL_ALLOC(b, obj->freelist, obj->elsize);
 #endif
+    /* Get the next entry from the free list. */
     void *entry = obj->freelist;
     if(dill_slow(!entry)) return NULL;
+    /* Update the free list with the net entry. */
     void *nextentry = *(void **)(entry + obj->offset);
     obj->freelist = nextentry ? nextentry : (char *)entry + obj->elsize;
+#ifdef DILL_VALGRIND
+    /* Tell valgrind to remove the entry from the free list. */
+    VALGRIND_MEMPOOL_FREE(obj, entry + obj->offset);
+    /* If the free list is empty. Add the next block element into the free list. */
+    if(!nextentry)
+        VALGRIND_MEMPOOL_ALLOC(obj, entry + obj->elsize + obj->offset, sizeof(void *));
+#endif
     obj->allocated++;
     if(obj->flags & DILL_ALLOC_FLAGS_ZERO) memset(entry, 0, obj->elsize);
+#ifdef DILL_VALGRIND
+    VALGRIND_MEMPOOL_ALLOC(b, entry, obj->elsize);
+#endif
     debug("end => allocated = %lu, total = %lu, address = %p\n",
             obj->allocated, obj->total, entry);
     return entry + obj->elsize;
@@ -279,18 +297,19 @@ static int apool_free(struct alloc_vfs *avfs, void *stack) {
         dill_cont(avfs, struct apool_alloc, avfs);
     /* Get the start of the stack memory */
     void *p = stack - obj->elsize;
+#ifdef DILL_VALGRIND
+    /* Need to find the pool block that this entry belongs to for valgrind */
+    void *b = apool_findblock(obj, p);
+    dill_assert(b);
+    VALGRIND_MEMPOOL_FREE(b, p);
+    VALGRIND_MEMPOOL_ALLOC(obj, p + obj->offset, sizeof(void *));
+#endif
     /* Store at the location of the freed memory, the pointer to the
        next element in the free list */
     *(void **)(p + obj->offset) = obj->freelist;
     /* Point the free list to p */
     obj->freelist = p;
     obj->allocated--;
-#ifdef DILL_VALGRIND
-    /* Need to find the pool block that this entry belongs to for valgrind */
-    void *b = apool_findblock(obj, p);
-    dill_assert(b);
-    VALGRIND_MEMPOOL_FREE(b, p);
-#endif
     debug("free => allocated = %lu, total = %lu, address = %p\n",
        obj->allocated, obj->total, p);
     return 0;
@@ -340,5 +359,6 @@ static void apool_hclose(struct hvfs *hvfs) {
         np = *p;
         free(p);
     } while((p = np));
+    VALGRIND_DESTROY_MEMPOOL(obj);
     free(obj);
 }

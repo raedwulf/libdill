@@ -119,7 +119,7 @@ int dill_pollset_in(struct dill_clause *cl, int id, int fd) {
     if(!dill_list_empty(&fdi->in)) {errno = EEXIST; return -1;}
     /* If not yet cached check whether fd exists and if so add it to pollset. */    
     if(dill_slow(!fdi->cached)) {
-        struct epoll_event ev;
+        struct epoll_event ev = {0};
         ev.data.fd = fd;
         ev.events = EPOLLIN;
         int rc = epoll_ctl(dill_efd, EPOLL_CTL_ADD, fd, &ev);
@@ -146,7 +146,7 @@ int dill_pollset_out(struct dill_clause *cl, int id, int fd) {
     if(!dill_list_empty(&fdi->out)) {errno = EEXIST; return -1;}
     /* If not yet cached check whether fd exists and if so add it to pollset. */    
     if(dill_slow(!fdi->cached)) {
-        struct epoll_event ev;
+        struct epoll_event ev = {0};
         ev.data.fd = fd;
         ev.events = EPOLLOUT;
         int rc = epoll_ctl(dill_efd, EPOLL_CTL_ADD, fd, &ev);
@@ -203,7 +203,7 @@ int dill_pollset_poll(int timeout) {
     while(dill_changelist != DILL_ENDLIST) {
         int fd = dill_changelist - 1;
         struct dill_fdinfo *fdi = &dill_fdinfos[fd];
-        struct epoll_event ev;
+        struct epoll_event ev = {0};
         ev.data.fd = fd;
         ev.events = 0;
         if(!dill_list_empty(&fdi->in) || fdi == dill_parentinfo)

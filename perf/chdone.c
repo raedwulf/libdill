@@ -41,7 +41,7 @@ static coroutine void worker(int ch) {
 
 int main(int argc, char *argv[]) {
     if(argc != 2) {
-        printf("usage: chan <millions-of-roundtrips>\n");
+        printf("usage: chdone <millions-of-roundtrips>\n");
         return 1;
     }
     long count = atol(argv[1]) * 1000000;

@@ -32,7 +32,7 @@
 
 int main(int argc, char *argv[]) {
     if(argc != 2) {
-        printf("usage: chsend <millions-of-messages>\n");
+        printf("usage: choosesend <millions-of-messages>\n");
         return 1;
     }
     long count = atol(argv[1]) * 1000000;

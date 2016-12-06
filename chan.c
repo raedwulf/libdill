@@ -251,6 +251,7 @@ int choose(struct chclause *clauses, int nclauses, int64_t deadline) {
     if(dill_slow(rc < 0)) return -1;
     if(dill_slow(nclauses < 0 || (nclauses != 0 && !clauses))) {
         errno = EINVAL; return -1;}
+    char buffer[sizeof(struct dill_chcl) * nclauses];
     /* First pass through the clauses. Find out which are immediately ready. */
     int available = 0;
     int i;
@@ -263,13 +264,13 @@ int choose(struct chclause *clauses, int nclauses, int64_t deadline) {
         switch(clauses[i].op) {
         case CHSEND:
             if(ch->items < ch->bufsz || !dill_list_empty(&ch->in) || ch->done) {
-                *(int*)&clauses[available].reserved = i;
+                ((int*)buffer)[available] = i;
                 available++;
             }
             break;
         case CHRECV:
             if(ch->items || !dill_list_empty(&ch->out) || ch->done) {
-                *(int*)&clauses[available].reserved = i;
+                ((int*)buffer)[available] = i;
                 available++;
             }
             break;
@@ -281,7 +282,7 @@ int choose(struct chclause *clauses, int nclauses, int64_t deadline) {
     /* If there's at least one clause available immediately, choose one of
        them at random and execute it. */
     if(available) {
-        int chosen = *(int*)&clauses[random() % available].reserved;
+        int chosen = ((int*)buffer)[random() % available];
         struct chclause *cl = &clauses[chosen];
         struct dill_chan *ch = hquery(cl->ch, dill_chan_type);
         dill_assert(ch);
@@ -342,7 +343,7 @@ int choose(struct chclause *clauses, int nclauses, int64_t deadline) {
     for(i = 0; i != nclauses; ++i) {
         struct dill_chan *ch = hquery(clauses[i].ch, dill_chan_type);
         dill_assert(ch);
-        struct dill_chcl *chcl = (struct dill_chcl*)&clauses[i].reserved;
+        struct dill_chcl *chcl = ((struct dill_chcl *)buffer) + i;
         chcl->val = clauses[i].val;
         dill_waitfor(&chcl->cl, i,
             clauses[i].op == CHRECV ? &ch->in : &ch->out, NULL);

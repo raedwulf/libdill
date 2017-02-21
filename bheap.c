@@ -181,7 +181,6 @@ void dill_bheap_erase(struct dill_bheap *self, struct dill_bheap_item *item) {
     }
 
     if(item == p) {
-        //printf("gah\n");
         if(p->up) {
             if(p->up->left == p) {
                 dill_assert(p->up->right == NULL);
@@ -190,12 +189,10 @@ void dill_bheap_erase(struct dill_bheap *self, struct dill_bheap_item *item) {
                 p->up->right = NULL;
         }
     } else if(item->left == p) {
-        //printf("sad\n");
         dill_bheap_swap_left(item);
         p->left = p->right;
         p->right = NULL;
     } else if(item->right == p) {
-        //printf("bad\n");
         dill_assert(item->left != NULL);
         dill_bheap_swap_right(item);
         p->right = NULL;
@@ -210,8 +207,6 @@ void dill_bheap_erase(struct dill_bheap *self, struct dill_bheap_item *item) {
                 p->up->right = NULL;
             }
         }
-        /* p should not have any children links. */
-        //dill_assert(p->left == NULL && p->right == NULL);
         /* If popped item is the item to be erase; do nothing more. */
         if(p == item) {
             /* Update the root if changed. */

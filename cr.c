@@ -87,7 +87,7 @@ int dill_ctx_cr_init(struct dill_ctx_cr *ctx) {
        without calling it. */
     ctx->r = &ctx->main;
     dill_qlist_init(&ctx->ready);
-    dill_rbtree_init(&ctx->timers);
+    dill_bheap_init(&ctx->timers);
     ctx->last_poll = now();
     /* Initialize main coroutine. */
     memset(&ctx->main, 0, sizeof(ctx->main));
@@ -119,8 +119,8 @@ void dill_ctx_cr_term(struct dill_ctx_cr *ctx) {
 static void dill_timer_cancel(struct dill_clause *cl) {
     struct dill_ctx_cr *ctx = &dill_getctx->cr;
     struct dill_tmclause *tmcl = dill_cont(cl, struct dill_tmclause, cl);
-    dill_rbtree_erase(&ctx->timers, &tmcl->item);
-    /* This is a sfaeguard. If item isn't properly removed from the rb-tree
+    dill_bheap_erase(&ctx->timers, &tmcl->item);
+    /* This is a safeguard. If item isn't properly removed from the rb-tree
        we can spot the fact by seeing cr set to NULL. */
     tmcl->cl.cr = NULL;
 }
@@ -130,7 +130,7 @@ void dill_timer(struct dill_tmclause *tmcl, int id, int64_t deadline) {
     struct dill_ctx_cr *ctx = &dill_getctx->cr;
     /* If the deadline is infinite there's nothing to wait for. */
     if(deadline < 0) return;
-    dill_rbtree_insert(&ctx->timers, deadline, &tmcl->item);
+    dill_bheap_insert(&ctx->timers, deadline, &tmcl->item);
     dill_waitfor(&tmcl->cl, id, dill_timer_cancel);
 }
 
@@ -344,11 +344,11 @@ int dill_wait(void)  {
             /* Compute timeout for the subsequent poll. */
             int timeout = 0;
             if(block) {
-                if(dill_rbtree_empty(&ctx->timers))
+                if(dill_bheap_empty(&ctx->timers))
                     timeout = -1;
                 else {
                     int64_t deadline = dill_cont(
-                        dill_rbtree_first(&ctx->timers),
+                        dill_bheap_first(&ctx->timers),
                         struct dill_tmclause, item)->item.val;
                     timeout = (int) (nw >= deadline ? 0 : deadline - nw);
                 }
@@ -358,16 +358,14 @@ int dill_wait(void)  {
             if(timeout != 0) nw = now();
             if(dill_slow(fired < 0)) continue;
             /* Fire all expired timers. */
-            if(!dill_rbtree_empty(&ctx->timers)) {
-                while(!dill_rbtree_empty(&ctx->timers)) {
-                    struct dill_tmclause *tmcl = dill_cont(
-                        dill_rbtree_first(&ctx->timers),
-                        struct dill_tmclause, item);
-                    if(tmcl->item.val > nw)
-                        break;
-                    dill_trigger(&tmcl->cl, ETIMEDOUT);
-                    fired = 1;
-                }
+            while(!dill_bheap_empty(&ctx->timers)) {
+                struct dill_tmclause *tmcl = dill_cont(
+                    dill_bheap_first(&ctx->timers),
+                    struct dill_tmclause, item);
+                if(tmcl->item.val > nw)
+                    break;
+                dill_trigger(&tmcl->cl, ETIMEDOUT);
+                fired = 1;
             }
             /* Never retry the poll in non-blocking mode. */
             if(!block || fired)

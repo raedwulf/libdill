@@ -87,7 +87,8 @@ check_PROGRAMS = \
     tests/sleep \
     tests/signals \
     tests/overload \
-    tests/rbtree
+    tests/rbtree \
+    tests/bheap
 
 if DILL_THREADS
 check_PROGRAMS += \

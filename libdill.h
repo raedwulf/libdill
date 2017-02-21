@@ -41,7 +41,7 @@
 /******************************************************************************/
 
 /*  Don't change this unless you know exactly what you're doing and have      */
-/*  read and understand the following documents:                              */
+/*  read and understood the following documents:                              */
 /*  www.gnu.org/software/libtool/manual/html_node/Libtool-versioning.html     */
 /*  www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html  */
 
@@ -87,6 +87,7 @@ DILL_EXPORT int64_t now(void);
 struct hvfs {
     void *(*query)(struct hvfs *vfs, const void *type);
     void (*close)(struct hvfs *vfs);
+    int (*done)(struct hvfs *vfs);
     /* Reserved. Do not use directly! */
     unsigned int refcount;
 };
@@ -95,6 +96,7 @@ DILL_EXPORT int hmake(struct hvfs *vfs);
 DILL_EXPORT void *hquery(int h, const void *type);
 DILL_EXPORT int hdup(int h);
 DILL_EXPORT int hclose(int h);
+DILL_EXPORT int hdone(int h);
 
 /******************************************************************************/
 /*  Coroutines                                                                */
@@ -108,12 +110,12 @@ DILL_EXPORT __attribute__((noinline)) int dill_prologue(sigjmp_buf **ctx,
     void **ptr, size_t len, const char *file, int line);
 DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
 
-/* In the following macros alloca(sizeof(size_t)) is used because clang
+/* The following macros use alloca(sizeof(size_t)) because clang
    doesn't support alloca with size zero. */
 
 /* This assembly setjmp/longjmp mechanism is in the same order as glibc and
-   musl but glibc implements pointer mangling, which is hard to support.
-   This should be binary-compatible with musl though. */
+   musl, but glibc implements pointer mangling, which is hard to support.
+   This should be binary-compatible with musl, though. */
 
 /* Stack-switching on X86-64. */
 #if defined(__x86_64__) && !defined DILL_ARCH_FALLBACK
@@ -195,12 +197,12 @@ DILL_EXPORT __attribute__((noinline)) void dill_epilogue(void);
     asm(""::"r"(alloca(sizeof(size_t))));\
     asm volatile("leal (%%eax), %%esp"::"eax"(x));
 
-/* Stack-switching on other microarchiterctures. */
+/* Stack-switching on other microarchitectures. */
 #else
 #define dill_setjmp(ctx) sigsetjmp(ctx, 0)
 #define dill_longjmp(ctx) siglongjmp(ctx, 1)
 /* For newer GCCs, -fstack-protector breaks on this; use -fno-stack-protector.
-   Alternatively, implement custom DILL_SETSP for your microarchitecture. */
+   Alternatively, implement a custom DILL_SETSP for your microarchitecture. */
 #define DILL_SETSP(x) \
     dill_unoptimisable = alloca((char*)alloca(sizeof(size_t)) - (char*)(x));
 #endif
@@ -253,9 +255,9 @@ struct chclause {
 
 struct chmem {
 #if defined(__i386__)
-    char reserved[36];
+    char reserved[40];
 #else
-    char reserved[72];
+    char reserved[80];
 #endif
 };
 
@@ -263,9 +265,11 @@ DILL_EXPORT int chmake(size_t itemsz);
 DILL_EXPORT int chmake_mem(size_t itemsz, struct chmem *mem);
 DILL_EXPORT int chsend(int ch, const void *val, size_t len, int64_t deadline);
 DILL_EXPORT int chrecv(int ch, void *val, size_t len, int64_t deadline);
-DILL_EXPORT int chdone(int ch);
 DILL_EXPORT int choose(struct chclause *clauses, int nclauses,
     int64_t deadline);
+
+/* chdone() is deprecated in favour of hdone(). */
+#define chdone hdone
 
 #endif
 

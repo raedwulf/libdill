@@ -52,6 +52,8 @@ libdill_la_SOURCES = \
     qlist.h \
     rbtree.h \
     rbtree.c \
+    bheap.h \
+    bheap.c \
     slist.h \
     stack.h \
     stack.c \

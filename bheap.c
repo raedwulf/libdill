@@ -169,7 +169,7 @@ void dill_bheap_insert(struct dill_bheap *self, int64_t val,
 }
 
 void dill_bheap_erase(struct dill_bheap *self, struct dill_bheap_item *item) {
-    /* Pop item at the bottom of the heap in list of leaves. */
+    /* Pop last item in heap. */
     struct dill_bheap_item *p = dill_bheap_traverse_last(self);
     dill_assert(p != NULL);
     self->count--;

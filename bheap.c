@@ -24,7 +24,6 @@
 #include "utils.h"
 
 #define dill_bheap_isnil(x) ((x) == &dill_bheap_nil)
-#define dill_bheap_isroot(x) ((x)->up->up == &dill_bheap_nil)
 
 static struct dill_bheap dill_bheap_nil = { 0, 0 };
 

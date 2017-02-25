@@ -36,12 +36,12 @@ static int64_t stop = 0;
 
 static coroutine void worker(int64_t nw, int i, int count) {
     if(i == 0) {
-	    msleep(nw + 999);
+	    msleep(nw + 997);
 	    start = now();
     } else if(i == count - 1) {
-	    msleep(nw + 1001);
+	    msleep(nw + 1000);
 	    stop = now();
-    } else msleep(nw + 1000);
+    } else msleep(nw + 998 + (i & 1));
 }
 
 int main(int argc, char *argv[]) {

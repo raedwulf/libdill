@@ -32,7 +32,7 @@
 
 #include "../libdill.h"
 
-#define BASE_TIME 1000
+#define BASE_TIME 5000
 
 static int64_t start = 0;
 static int64_t stop = 0;
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
     for(i = 0; i != count; ++i) {
         int h = go(worker(nw, i, count));
     }
-    sleep(2);
+    sleep((BASE_TIME / 1000) + 1);
     yield();
     yield();
 

@@ -26,8 +26,13 @@
 #include <stdint.h>
 
 struct dill_bheap_item {
-    struct dill_bheap_item *left;
-    struct dill_bheap_item *right;
+    union {
+        struct {
+            struct dill_bheap_item *left;
+            struct dill_bheap_item *right;
+        };
+        struct dill_bheap_item *child[2];
+    };
     struct dill_bheap_item *up;
     int64_t val;
 

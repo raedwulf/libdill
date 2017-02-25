@@ -114,7 +114,7 @@ static void dill_bheap_sift_up(struct dill_bheap *self, struct dill_bheap_item *
 static void dill_bheap_sift_down(struct dill_bheap *self, struct dill_bheap_item *item) {
     struct dill_bheap_item *next;
     /* If item has no children, there is nothing to do. */
-    if(!item->left) return;
+    if(dill_slow(!item->left)) return;
     int l = (item->left->val < item->val);
     int r = item->right && (item->right->val < item->val);
     struct dill_bheap_item *child = NULL;
@@ -159,7 +159,7 @@ void dill_bheap_erase(struct dill_bheap *self, struct dill_bheap_item *item) {
     dill_assert(p != NULL);
     self->count--;
     /* Empty heap. */
-    if(!self->count) {
+    if(dill_slow(!self->count)) {
         dill_assert(p == self->root);
         self->root = NULL;
         return;

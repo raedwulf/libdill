@@ -141,7 +141,7 @@ static void dill_bheap_sift_up(struct dill_bheap *self, struct dill_bheap_item *
     if(dill_slow(!item->up)) return;
     while(item->up && item->up->val > item->val)
         dill_bheap_swap_child(item->up, item->up->left != item);
-    if(item->up == NULL) {self->root = item; return;}
+    if(item->up == NULL) self->root = item;
 }
 
 static void dill_bheap_sift_down(struct dill_bheap *self, struct dill_bheap_item *item) {

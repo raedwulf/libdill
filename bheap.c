@@ -70,8 +70,6 @@ static int dill_bheap_traverse_next(struct dill_bheap *self, struct dill_bheap_i
         case  2: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
         case  1: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
     }
-    //for(int i = 0; i < height - 1; i++, dir <<= 1)
-    //    *parent = (dir & 0x80000000) ? (*parent)->right : (*parent)->left;
     return !!(dir & 0x80000000);
 }
 
@@ -113,65 +111,36 @@ static struct dill_bheap_item *dill_bheap_traverse_last(struct dill_bheap *self)
         case  2: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
         case  1: node = node->child[!!(dir & 0x80000000)];
     }
-    //for(int i = 0; i < height; i++, dir <<= 1)
-    //    node = (dir & 0x80000000) ? node->right : node->left;
     return node;
 }
 
-static void dill_bheap_swap_left(struct dill_bheap_item *item) {
-    struct dill_bheap_item *up, *left, *right;
+static struct dill_bheap_item *dill_bheap_swap_child(struct dill_bheap_item *item, int right) {
+    struct dill_bheap_item *up, *c0, *c1;
     up = item->up;
-    left = item->left;
-    right = item->right;
+    c0 = item->child[right];
+    c1 = item->child[!right];
 
-    item->up = left;
-    item->left = left->left;
-    item->right = left->right;
+    item->up = c0;
+    item->left = c0->left;
+    item->right = c0->right;
     if(item->left) item->left->up = item;
     if(item->right) item->right->up = item;
 
-    left->up = up;
-    left->left = item;
-    left->right = right;
-    if(right) right->up = left;
-    if(left->right) left->right->up = left;
+    c0->up = up;
+    c0->child[right] = item;
+    c0->child[!right] = c1;
+    if(c1) c1->up = c0;
+    if(c0->child[!right]) c0->child[!right]->up = c0;
 
-    if(up) up->child[up->left != item] = left;
-}
-
-static void dill_bheap_swap_right(struct dill_bheap_item *item) {
-    struct dill_bheap_item *up, *left, *right;
-    up = item->up;
-    left = item->left;
-    right = item->right;
-
-    item->up = right;
-    item->left = right->left;
-    item->right = right->right;
-    if(item->left) item->left->up = item;
-    if(item->right) item->right->up = item;
-
-    right->up = up;
-    right->left = left;
-    right->right = item;
-    if(left) left->up = right;
-    if(right->left) right->left->up = right;
-
-    if(up) up->child[up->left != item] = right;
-}
-
-static struct dill_bheap_item *dill_bheap_swap(struct dill_bheap_item *item) {
-    if(item->up->left == item)
-        dill_bheap_swap_left(item->up);
-    else
-        dill_bheap_swap_right(item->up);
+    if(up) up->child[up->left != item] = c0;
+    return c0;
 }
 
 static void dill_bheap_sift_up(struct dill_bheap *self, struct dill_bheap_item *item) {
     /* If item has no parent, there is nothing to do. */
     if(dill_slow(!item->up)) return;
     while(item->up && item->up->val > item->val)
-        dill_bheap_swap(item);
+        dill_bheap_swap_child(item->up, item->up->left != item);
     if(item->up == NULL) {self->root = item; return;}
 }
 
@@ -179,21 +148,17 @@ static void dill_bheap_sift_down(struct dill_bheap *self, struct dill_bheap_item
     struct dill_bheap_item *next;
     /* If item has no children, there is nothing to do. */
     if(!item->left) return;
+    int l = (item->left->val < item->val);
+    int r = item->right && (item->right->val < item->val);
+    struct dill_bheap_item *child = NULL;
+    if(l || r) {
+        child = dill_bheap_swap_child(item, !l);
+        if(!child->up) self->root = child;
+    } else return;
     while(1) {
-        if(item->left && (item->left->val < item->val)) {
-            next = item->left;
-            dill_bheap_swap_left(item);
-        } else if(item->right && (item->right->val < item->val)) {
-            next = item->right;
-            dill_bheap_swap_right(item);
-        } else {
-            if(!item->left && item->right) {
-                item->left = item->right;
-                item->right = NULL;
-            }
-            break;
-        }
-        if(next->up == NULL) self->root = next;
+        l = item->left && (item->left->val < item->val);
+        r = item->right && (item->right->val < item->val);
+        if(l || r) dill_bheap_swap_child(item, !l); else break;
     }
 }
 
@@ -222,39 +187,31 @@ void dill_bheap_insert(struct dill_bheap *self, int64_t val,
 }
 
 void dill_bheap_erase(struct dill_bheap *self, struct dill_bheap_item *item) {
-    /* Pop last item in heap. */
+    /* Get last item in heap. */
     struct dill_bheap_item *p = dill_bheap_traverse_last(self);
-    //dill_assert(p != NULL);
+    dill_assert(p != NULL);
     self->count--;
-    /* Last item. */
+    /* Empty heap. */
     if(!self->count) {
         self->root = NULL;
         return;
     }
+    /* Removing last item. */
     if(item == p) {
         if(p->up) p->up->child[p->up->left != p] = NULL;
-    } else if(item->left == p) {
-        dill_bheap_swap_left(item);
-        p->left = p->right;
-        p->right = NULL;
-    } else if(item->right == p) {
-        //dill_assert(item->left != NULL);
-        dill_bheap_swap_right(item);
+        return;
+    }
+    int l = item->left == p;
+    int r = item->right == p;
+    if(l || r) {
+        dill_bheap_swap_child(item, !l);
+        if(l) p->left = p->right;
         p->right = NULL;
     } else {
         /* Remove p's parents' links to p. */
         if(p->up) p->up->child[p->up->left != p] = NULL;
-        /* If popped item is the item to be erase; do nothing more. */
-        if(p == item) {
-            /* Update the root if changed. */
-            if(p == self->root)
-                self->root = NULL;
-            return;
-        }
         /* Insert the new item under the parent of item. */
-        if(item->up) {
-            item->up->child[item->up->left != item] = p;
-        }
+        if(item->up) item->up->child[item->up->left != item] = p;
         /* Move internal links of item to p. */
         if(item->left) item->left->up = p;
         if(item->right) item->right->up = p;

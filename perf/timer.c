@@ -66,9 +66,9 @@ int main(int argc, char *argv[]) {
     long duration = (long)(stop - start);
     long ns = (duration * 1000000) / count;
 
-    printf("executed %ld coroutines in %f seconds\n",
+    printf("executed %ld timers in %f seconds\n",
         (long)(count), ((float)duration) / 1000);
-    printf("duration of timers in queue: %ld ns\n", ns);
+    printf("duration of timer processing: %ld ns\n", ns);
 
     return 0;
 }

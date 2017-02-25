@@ -42,7 +42,6 @@ static coroutine void worker(int64_t nw, int i, int count) {
 	    msleep(nw + 1001);
 	    stop = now();
     } else msleep(nw + 1000);
-    printf("%d\n", i);
 }
 
 int main(int argc, char *argv[]) {
@@ -63,11 +62,11 @@ int main(int argc, char *argv[]) {
     yield();
 
     long duration = (long)(stop - start);
-    long ms = duration / count;
+    long ns = (duration * 1000000) / count;
 
     printf("executed %ld coroutines in %f seconds\n",
         (long)(count), ((float)duration) / 1000);
-    printf("duration of timers in queue: %ld ms\n", ms);
+    printf("duration of timers in queue: %ld ns\n", ns);
 
     return 0;
 }

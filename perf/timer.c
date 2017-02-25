@@ -27,21 +27,24 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "../libdill.h"
+
+#define BASE_TIME 1000
 
 static int64_t start = 0;
 static int64_t stop = 0;
 
 static coroutine void worker(int64_t nw, int i, int count) {
     if(i == 0) {
-	    msleep(nw + 997);
+	    msleep(nw + BASE_TIME - 1);
 	    start = now();
     } else if(i == count - 1) {
-	    msleep(nw + 1000);
+	    msleep(nw + BASE_TIME + 1000);
 	    stop = now();
-    } else msleep(nw + 998 + (i & 1));
+    } else msleep(nw + BASE_TIME + (rand() % 1000));
 }
 
 int main(int argc, char *argv[]) {
@@ -56,8 +59,7 @@ int main(int argc, char *argv[]) {
     for(i = 0; i != count; ++i) {
         int h = go(worker(nw, i, count));
     }
-    sleep(1);
-    //msleep(nw + 1002);
+    sleep(2);
     yield();
     yield();
 

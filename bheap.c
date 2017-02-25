@@ -23,9 +23,40 @@
 #include "bheap.h"
 #include "utils.h"
 
-#define dill_bheap_isnil(x) ((x) == &dill_bheap_nil)
-
-static struct dill_bheap dill_bheap_nil = { 0, 0 };
+#define dill_bheap_traverse(h,n,d)\
+    switch((h)) {\
+        case 31: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 30: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 29: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 28: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 27: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 26: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 25: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 24: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 23: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 22: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 21: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 20: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 19: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 18: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 17: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 16: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 15: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 14: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 13: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 12: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 11: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case 10: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  9: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  8: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  7: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  6: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  5: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  4: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  3: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  2: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+        case  1: n = (n)->child[!!((d) & 0x80000000)]; d <<= 1;\
+    }
 
 void dill_bheap_init(struct dill_bheap *self) {
     self->root = NULL;
@@ -37,39 +68,7 @@ static int dill_bheap_traverse_next(struct dill_bheap *self, struct dill_bheap_i
     int height = 31 - __builtin_clz(self->count + 1);
     int dir = (self->count + 1) << (32 - height);
     *parent = self->root;
-    switch(height - 1) {
-        case 31: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 30: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 29: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 28: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 27: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 26: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 25: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 24: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 23: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 22: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 21: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 20: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 19: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 18: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 17: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 16: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 15: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 14: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 13: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 12: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 11: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 10: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  9: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  8: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  7: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  6: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  5: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  4: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  3: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  2: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  1: *parent = (*parent)->child[!!(dir & 0x80000000)]; dir <<= 1;
-    }
+    dill_bheap_traverse(height - 1, *parent, dir);
     return !!(dir & 0x80000000);
 }
 
@@ -78,39 +77,7 @@ static struct dill_bheap_item *dill_bheap_traverse_last(struct dill_bheap *self)
     int height = 31 - __builtin_clz(self->count);
     int dir = self->count << (32 - height);
     struct dill_bheap_item *node = self->root;
-    switch(height) {
-        case 31: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 30: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 29: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 28: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 27: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 26: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 25: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 24: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 23: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 22: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 21: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 20: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 19: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 18: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 17: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 16: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 15: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 14: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 13: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 12: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 11: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case 10: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  9: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  8: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  7: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  6: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  5: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  4: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  3: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  2: node = node->child[!!(dir & 0x80000000)]; dir <<= 1;
-        case  1: node = node->child[!!(dir & 0x80000000)];
-    }
+    dill_bheap_traverse(height, node, dir);
     return node;
 }
 
@@ -139,7 +106,7 @@ static struct dill_bheap_item *dill_bheap_swap_child(struct dill_bheap_item *ite
 static void dill_bheap_sift_up(struct dill_bheap *self, struct dill_bheap_item *item) {
     /* If item has no parent, there is nothing to do. */
     if(dill_slow(!item->up)) return;
-    while(item->up && item->up->val > item->val)
+    while(item->up && item->up->val >= item->val)
         dill_bheap_swap_child(item->up, item->up->left != item);
     if(item->up == NULL) self->root = item;
 }
@@ -193,12 +160,15 @@ void dill_bheap_erase(struct dill_bheap *self, struct dill_bheap_item *item) {
     self->count--;
     /* Empty heap. */
     if(!self->count) {
+        dill_assert(p == self->root);
         self->root = NULL;
         return;
     }
+    /* p cannot be root. */
+    dill_assert(p->up != NULL);
     /* Removing last item. */
     if(item == p) {
-        if(p->up) p->up->child[p->up->left != p] = NULL;
+        p->up->child[p->up->left != p] = NULL;
         return;
     }
     int l = item->left == p;
@@ -209,7 +179,7 @@ void dill_bheap_erase(struct dill_bheap *self, struct dill_bheap_item *item) {
         p->right = NULL;
     } else {
         /* Remove p's parents' links to p. */
-        if(p->up) p->up->child[p->up->left != p] = NULL;
+        p->up->child[p->up->left != p] = NULL;
         /* Insert the new item under the parent of item. */
         if(item->up) item->up->child[item->up->left != item] = p;
         /* Move internal links of item to p. */

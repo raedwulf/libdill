@@ -307,7 +307,48 @@ void dill_waitfor(struct dill_clause *cl, int id,
     cl->cancel = cancel;
 }
 
-int dill_wait(void)  {
+static int dill_extpoll(struct dill_ctx_cr *ctx, int64_t nw) {
+    int block = dill_qlist_empty(&ctx->ready);
+    while(1) {
+        /* Compute the timeout for the subsequent poll. */
+        int timeout = 0;
+        if(block) {
+            if(dill_rbtree_empty(&ctx->timers))
+                timeout = -1;
+            else {
+                int64_t deadline = dill_cont(
+                    dill_rbtree_first(&ctx->timers),
+                    struct dill_tmclause, item)->item.val;
+                timeout = (int) (nw >= deadline ? 0 : deadline - nw);
+            }
+        }
+        /* Wait for events. */
+        int fired = dill_pollset_poll(timeout);
+        if(timeout != 0) nw = now();
+        if(dill_slow(fired < 0)) continue;
+        /* Fire all expired timers. */
+        if(!dill_rbtree_empty(&ctx->timers)) {
+            while(!dill_rbtree_empty(&ctx->timers)) {
+                struct dill_tmclause *tmcl = dill_cont(
+                    dill_rbtree_first(&ctx->timers),
+                    struct dill_tmclause, item);
+                if(tmcl->item.val > nw)
+                    break;
+                dill_trigger(&tmcl->cl, ETIMEDOUT);
+                fired = 1;
+            }
+        }
+        /* Never retry the poll when in non-blocking mode. */
+        if(!block || fired)
+            break;
+        /* If the timeout was hit but there were no expired timers, do the poll
+           again. It can happen if the timers were canceled in the
+           meantime. */
+    }
+    ctx->last_poll = nw;
+}
+
+inline int dill_wait(void) {
     struct dill_ctx_cr *ctx = &dill_getctx->cr;
     /* Store the context of the current coroutine, if any. */
     if(dill_setjmp(ctx->r->ctx)) {
@@ -325,46 +366,8 @@ int dill_wait(void)  {
        Still, we'll do it at least once a second. The external signal may
        very well be a deadline or a user-issued command that cancels the CPU
        intensive operation. */
-    if(dill_qlist_empty(&ctx->ready) || nw > ctx->last_poll + 1000) {
-        int block = dill_qlist_empty(&ctx->ready);
-        while(1) {
-            /* Compute the timeout for the subsequent poll. */
-            int timeout = 0;
-            if(block) {
-                if(dill_rbtree_empty(&ctx->timers))
-                    timeout = -1;
-                else {
-                    int64_t deadline = dill_cont(
-                        dill_rbtree_first(&ctx->timers),
-                        struct dill_tmclause, item)->item.val;
-                    timeout = (int) (nw >= deadline ? 0 : deadline - nw);
-                }
-            }
-            /* Wait for events. */
-            int fired = dill_pollset_poll(timeout);
-            if(timeout != 0) nw = now();
-            if(dill_slow(fired < 0)) continue;
-            /* Fire all expired timers. */
-            if(!dill_rbtree_empty(&ctx->timers)) {
-                while(!dill_rbtree_empty(&ctx->timers)) {
-                    struct dill_tmclause *tmcl = dill_cont(
-                        dill_rbtree_first(&ctx->timers),
-                        struct dill_tmclause, item);
-                    if(tmcl->item.val > nw)
-                        break;
-                    dill_trigger(&tmcl->cl, ETIMEDOUT);
-                    fired = 1;
-                }
-            }
-            /* Never retry the poll when in non-blocking mode. */
-            if(!block || fired)
-                break;
-            /* If the timeout was hit but there were no expired timers, do the poll
-               again. It can happen if the timers were canceled in the
-               meantime. */
-        }
-        ctx->last_poll = nw;
-    }
+    if(dill_qlist_empty(&ctx->ready) || nw > ctx->last_poll + 1000)
+        dill_extpoll(ctx, nw);
     /* There's a coroutine ready to be executed so jump to it. */
     struct dill_slist *it = dill_qlist_pop(&ctx->ready);
     it->next = NULL;

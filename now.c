@@ -24,10 +24,6 @@
 #include <sys/time.h>
 #include <time.h>
 
-#if defined(__x86_64__) || defined(__i386__)
-#include <x86intrin.h>
-#endif
-
 #include "ctx.h"
 
 int64_t dill_mnow(void) {
@@ -69,40 +65,8 @@ int64_t dill_mnow(void) {
 #endif
 }
 
-/* Like now(), this function can be called only after context is initialized
-   but unlike now() it doesn't do time caching. */
-static int64_t dill_now_(void) {
-#if defined __APPLE__
-    struct dill_ctx_now *ctx = &dill_getctx->now;
-    uint64_t ticks = mach_absolute_time();
-    return (int64_t)(ticks * ctx->mtid.numer / ctx->mtid.denom / 1000000);
-#else
-    return dill_mnow();
-#endif
-}
-
 int64_t dill_now(void) {
-#if defined(__x86_64__) || defined(__i386__)
-    /* On x86 platforms, rdtsc instruction can be used to quickly check time
-       in form of CPU cycles. If less than 1M cycles have elapsed since the
-       last dill_now_() call we assume it's still the same millisecond and return
-       cached time. This optimization can give a huge speedup with old systems.
-       1M number is chosen is such a way that it results in getting time every
-       millisecond on 1GHz processors. On faster processors we'll query time
-       somewhat more often but the number of queries should still be
-       statistically insignificant. On slower processors we'll start losing
-       precision, e.g. on 500MHz processor we can diverge by 1ms. */
-    struct dill_ctx_now *ctx = &dill_getctx->now;
-    uint64_t tsc = __rdtsc();
-    int64_t diff = tsc - ctx->last_tsc;
-    if(diff < 0) diff = -diff;
-    if(dill_fast(diff < 1000000ULL)) return ctx->last_time;
-    ctx->last_tsc = tsc;
-    ctx->last_time = dill_now_();
-    return ctx->last_time;
-#else
-    return dill_now_();
-#endif
+    return dill_ctx_now(&dill_getctx->now);
 }
 
 int dill_ctx_now_init(struct dill_ctx_now *ctx) {

@@ -436,30 +436,32 @@ void dill_waitfor(struct dill_clause *cl, int id,
     cl->cancel = cancel;
 }
 
-static void dill_extpoll(struct dill_ctx_cr *ctx, int64_t nw) {
-    int block = dill_qlist_empty(&ctx->ready);
+static void dill_extpoll(struct dill_ctx *ctx, int64_t nw) {
+    struct dill_ctx_now *cnow = &ctx->now;
+    struct dill_ctx_cr *ccr = &ctx->cr;
+    int block = dill_qlist_empty(&ccr->ready);
     while(1) {
         /* Compute the timeout for the subsequent poll. */
         int timeout = 0;
         if(block) {
-            if(dill_rbtree_empty(&ctx->timers))
+            if(dill_rbtree_empty(&ccr->timers))
                 timeout = -1;
             else {
                 int64_t deadline = dill_cont(
-                    dill_rbtree_first(&ctx->timers),
+                    dill_rbtree_first(&ccr->timers),
                     struct dill_tmclause, item)->item.val;
                 timeout = (int) (nw >= deadline ? 0 : deadline - nw);
             }
         }
         /* Wait for events. */
         int fired = dill_pollset_poll(timeout);
-        if(timeout != 0) nw = dill_now();
+        if(timeout != 0) nw = dill_ctx_now(cnow);
         if(dill_slow(fired < 0)) continue;
         /* Fire all expired timers. */
-        if(!dill_rbtree_empty(&ctx->timers)) {
-            while(!dill_rbtree_empty(&ctx->timers)) {
+        if(!dill_rbtree_empty(&ccr->timers)) {
+            while(!dill_rbtree_empty(&ccr->timers)) {
                 struct dill_tmclause *tmcl = dill_cont(
-                    dill_rbtree_first(&ctx->timers),
+                    dill_rbtree_first(&ccr->timers),
                     struct dill_tmclause, item);
                 if(tmcl->item.val > nw)
                     break;
@@ -474,37 +476,39 @@ static void dill_extpoll(struct dill_ctx_cr *ctx, int64_t nw) {
            do the poll again. It can happen if the timers were canceled
            in the meantime. */
     }
-    ctx->last_poll = nw;
+    ccr->last_poll = nw;
 }
 
 int dill_wait(void) {
-    struct dill_ctx_cr *ctx = &dill_getctx->cr;
+    struct dill_ctx *ctx = dill_getctx;
+    struct dill_ctx_now *cnow = &ctx->now;
+    struct dill_ctx_cr *ccr = &ctx->cr;
     /* Store the context of the current coroutine, if any. */
-    if(dill_setjmp(ctx->r->ctx)) {
+    if(dill_setjmp(ccr->r->ctx)) {
         /* We get here once the coroutine is resumed. */
-        dill_slist_init(&ctx->r->clauses);
-        errno = ctx->r->err;
-        return ctx->r->id;
+        dill_slist_init(&ccr->r->clauses);
+        errno = ccr->r->err;
+        return ccr->r->id;
     }
     /* For performance reasons, we want to avoid excessive checking of current
        time, so we cache the value here. It will be recomputed only after
        a blocking call. */
-    int64_t nw = dill_now();
+    int64_t nw = dill_ctx_now(cnow);
     /* Wait for timeouts and external events. However, if there are ready
        coroutines there's no need to poll for external events every time.
        Still, we'll do it at least once a second. The external signal may
        very well be a deadline or a user-issued command that cancels the CPU
        intensive operation. */
-    if(dill_qlist_empty(&ctx->ready) || nw > ctx->last_poll + 1000)
+    if(dill_qlist_empty(&ccr->ready) || nw > ccr->last_poll + 1000)
         dill_extpoll(ctx, nw);
     /* There's a coroutine ready to be executed so jump to it. */
-    struct dill_slist *it = dill_qlist_pop(&ctx->ready);
+    struct dill_slist *it = dill_qlist_pop(&ccr->ready);
     it->next = NULL;
-    ctx->r = dill_cont(it, struct dill_cr, ready);
+    ccr->r = dill_cont(it, struct dill_cr, ready);
     /* dill_longjmp has to be at the end of a function body, otherwise stack
        unwinding information will be trimmed if a crash occurs in this
        function. */
-    dill_longjmp(ctx->r->ctx);
+    dill_longjmp(ccr->r->ctx);
     return 0;
 }
 

@@ -31,6 +31,10 @@
 #include <mach/mach_time.h>
 #endif
 
+#if defined(__x86_64__) || defined(__i386__)
+#include <x86intrin.h>
+#endif
+
 struct dill_ctx_now {
 #if defined __APPLE__
     mach_timebase_info_data_t mtid;
@@ -48,5 +52,28 @@ void dill_ctx_now_term(struct dill_ctx_now *ctx);
    I.e. it can be called before calling dill_ctx_now_init(). */
 int64_t dill_mnow(void);
 
+/* Same as dill_now() except that context is passed as a parameter */
+static int64_t dill_ctx_now(struct dill_ctx_now *ctx) {
+#if defined(__x86_64__) || defined(__i386__)
+    /* On x86 platforms, rdtsc instruction can be used to quickly check time
+       in form of CPU cycles. If less than 1M cycles have elapsed since the
+       last dill_now_() call we assume it's still the same millisecond and return
+       cached time. This optimization can give a huge speedup with old systems.
+       1M number is chosen is such a way that it results in getting time every
+       millisecond on 1GHz processors. On faster processors we'll query time
+       somewhat more often but the number of queries should still be
+       statistically insignificant. On slower processors we'll start losing
+       precision, e.g. on 500MHz processor we can diverge by 1ms. */
+    uint64_t tsc = __rdtsc();
+    int64_t diff = tsc - ctx->last_tsc;
+    if(diff < 0) diff = -diff;
+    if(dill_fast(diff < 1000000ULL)) return ctx->last_time;
+    ctx->last_tsc = tsc;
+    ctx->last_time = dill_mnow();
+    return ctx->last_time;
+#else
+    return dill_mnow();
 #endif
+}
 
+#endif

@@ -42,11 +42,15 @@ struct dill_ctx_now {
 #if defined(__x86_64__) || defined(__i386__)
     int64_t last_time;
     uint64_t last_tsc;
+    int64_t first_time;
+    uint64_t first_tsc;
+    uint64_t interval;
 #endif
 };
 
 int dill_ctx_now_init(struct dill_ctx_now *ctx);
 void dill_ctx_now_term(struct dill_ctx_now *ctx);
+int64_t dill_unow(void);
 
 /* Same as dill_now() except that it doesn't use the context.
    I.e. it can be called before calling dill_ctx_now_init(). */
@@ -67,10 +71,19 @@ static int64_t dill_ctx_now(struct dill_ctx_now *ctx) {
     uint64_t tsc = __rdtsc();
     int64_t diff = tsc - ctx->last_tsc;
     if(diff < 0) diff = -diff;
-    if(dill_fast(diff < 1000000ULL)) return ctx->last_time;
+    //if(dill_fast(diff < 1982161)) return (ctx->last_time / 1000);
+    if(dill_fast(diff < 1000000)) return (ctx->last_time / 1000);
+    //int inc = (diff / 1982);
+    //int64_t nw = ctx->last_time + inc;
+    int64_t nw = dill_unow();
+    //int64_t diffus = (nw - ctx->first_time);
+    //if(diffus < 2000) {
+    //    ctx->interval = ((tsc - ctx->first_tsc) * 1000ULL) / diffus;
+    //    printf("%llu\n", ctx->interval);
+    //}
     ctx->last_tsc = tsc;
-    ctx->last_time = dill_mnow();
-    return ctx->last_time;
+    ctx->last_time = nw;
+    return nw / 1000;
 #else
     return dill_mnow();
 #endif

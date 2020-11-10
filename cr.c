@@ -493,14 +493,14 @@ int dill_wait(void) {
     /* For performance reasons, we want to avoid excessive checking of current
        time, so we cache the value here. It will be recomputed only after
        a blocking call. */
-    int64_t nw = dill_ctx_now(cnow);
+    //int64_t nw = dill_ctx_now(cnow);
     /* Wait for timeouts and external events. However, if there are ready
        coroutines there's no need to poll for external events every time.
        Still, we'll do it at least once a second. The external signal may
        very well be a deadline or a user-issued command that cancels the CPU
        intensive operation. */
-    if(dill_qlist_empty(&ccr->ready) || nw > ccr->last_poll + 1000)
-        dill_extpoll(ctx, nw);
+    //if(dill_qlist_empty(&ccr->ready) || nw > ccr->last_poll + 1000)
+    //    dill_extpoll(ctx, nw);
     /* There's a coroutine ready to be executed so jump to it. */
     struct dill_slist *it = dill_qlist_pop(&ccr->ready);
     it->next = NULL;
